@@ -49,7 +49,7 @@ import org.springframework.web.context.support.StandardServletEnvironment;
 /**
  * 这是HttpServlet的一个简单实现，将web.xml中servlet标签的init-param下的配置参数作为属性
  *
- * 作为一个非常实用的servlet超类，在属性设置时它会自动进行配置参数的类型转换，子类也可以进行强制属性的指定，而没有多余的没有对应强制属性的参数会被简单地忽略掉。
+ * 作为一个非常实用的servlet超类，在属性设置时它会自动进行配置参数的类型转换，子类也可以进行强制属性的指定，而多余的没有对应强制属性的参数会被简单地忽略掉。
  *
  * 继承了HttpServlet的默认方法doGet/doGet等，而具体的请求应该怎样处理交由子类实现。
  *
