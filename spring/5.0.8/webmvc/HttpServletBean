@@ -55,7 +55,7 @@ import org.springframework.web.context.support.StandardServletEnvironment;
  *
  * 它并不依赖于Spring的应用上下文（ApplicationContext）概念，通常一些简单的servlet并不会加载自己的上下文，而是通过getServletContext()方法过滤访问来自spring根应用上下文的业务bean。
  *
- * 它是一个专门用于加载自身应用上下文的servlet，是功能强大的DispatcherServlet的直接父类。
+ * FrameworkServlet是一个更为专业加载自身应用上下文的servlet，是功能强大的DispatcherServlet的直接父类。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
