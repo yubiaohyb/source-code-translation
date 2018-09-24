@@ -878,8 +878,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Build a LocaleContext for the given request, exposing the request's
-	 * primary locale as current locale.
+	 * 为给定请求构造本地信息上下文，将请求的初始本地信息作为当前本地信息暴露出去。
 	 * @param request current HTTP request
 	 * @return the corresponding LocaleContext, or {@code null} if none to bind
 	 * @see LocaleContextHolder#setLocaleContext
@@ -890,9 +889,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Build ServletRequestAttributes for the given request (potentially also
-	 * holding a reference to the response), taking pre-bound attributes
-	 * (and their type) into consideration.
+	 * 为给定请求构造servlet请求属性（也可能还带有一个响应的引用），处理之前绑定属性及它们的类型。
 	 * @param request current HTTP request
 	 * @param response current HTTP response
 	 * @param previousAttributes pre-bound RequestAttributes instance, if any
@@ -908,7 +905,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			return new ServletRequestAttributes(request, response);
 		}
 		else {
-			return null;  // preserve the pre-bound RequestAttributes instance
+			return null;  // 可以考虑保存之前绑定请求属性实例
 		}
 	}
 
@@ -940,7 +937,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			long startTime, @Nullable Throwable failureCause) {
 
 		if (this.publishEvents && this.webApplicationContext != null) {
-			// Whether or not we succeeded, publish an event.
+			// 无论请求是否处理成功，发布请求已处理事件
 			long processingTime = System.currentTimeMillis() - startTime;
 			this.webApplicationContext.publishEvent(
 					new ServletRequestHandledEvent(this,
@@ -952,9 +949,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Determine the username for the given request.
-	 * <p>The default implementation takes the name of the UserPrincipal, if any.
-	 * Can be overridden in subclasses.
+	 * 获取给定请求用户名。
+	 * 默认取UserPrincipal的名称。
+	 * 可由子类覆写。
 	 * @param request current HTTP request
 	 * @return the username, or {@code null} if none found
 	 * @see javax.servlet.http.HttpServletRequest#getUserPrincipal()
@@ -967,12 +964,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 
 	/**
-	 * Subclasses must implement this method to do the work of request handling,
-	 * receiving a centralized callback for GET, POST, PUT and DELETE.
-	 * <p>The contract is essentially the same as that for the commonly overridden
-	 * {@code doGet} or {@code doPost} methods of HttpServlet.
-	 * <p>This class intercepts calls to ensure that exception handling and
-	 * event publication takes place.
+	 * 子类必须实现此方法处理请求，以此为中心接收GET, POST, PUT and DELETE的回调。
+	 * HttpServlet的doGet和doPost的方法覆写规则基本一致。
+	 * 当前类拦截调用保证异常处理和事件发布正常。
 	 * @param request current HTTP request
 	 * @param response current HTTP response
 	 * @throws Exception in case of any kind of processing failure
@@ -984,8 +978,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 
 	/**
-	 * ApplicationListener endpoint that receives events from this servlet's WebApplicationContext
-	 * only, delegating to {@code onApplicationEvent} on the FrameworkServlet instance.
+	 * 监听器
+	 * 通过FrameworkServlet的onApplicationEvent建立关联，只接收来自当前servlet的web应用上下文的事件。
 	 */
 	private class ContextRefreshListener implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -997,8 +991,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 
 	/**
-	 * CallableProcessingInterceptor implementation that initializes and resets
-	 * FrameworkServlet's context holders, i.e. LocaleContextHolder and RequestContextHolder.
+	 * 回调处理拦截器实现
+	 * 初始化/重置FrameworkServlet的上下文缓存。
 	 */
 	private class RequestBindingInterceptor implements CallableProcessingInterceptor {
 
