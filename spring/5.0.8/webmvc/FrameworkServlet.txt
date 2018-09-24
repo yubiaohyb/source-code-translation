@@ -493,16 +493,10 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Instantiate the WebApplicationContext for this servlet, either a default
-	 * {@link org.springframework.web.context.support.XmlWebApplicationContext}
-	 * or a {@link #setContextClass custom context class}, if set.
-	 * <p>This implementation expects custom contexts to implement the
-	 * {@link org.springframework.web.context.ConfigurableWebApplicationContext}
-	 * interface. Can be overridden in subclasses.
-	 * <p>Do not forget to register this servlet instance as application listener on the
-	 * created context (for triggering its {@link #onRefresh callback}, and to call
-	 * {@link org.springframework.context.ConfigurableApplicationContext#refresh()}
-	 * before returning the context instance.
+	 * 通过默认的XmlWebApplicationContext或者通过setContextClass方法设置的自定义的上下文类为servlet初始化web应用上下文。
+	 * 当然，如果是自定义上下文的话，需要实现ConfigurableWebApplicationContext接口。
+	 * 可以在子类中覆写此方法。
+	 * 不要忘记将此servlet作为应用程序监听器注册到创建的上下文上（因为后续在返回上下文实例前，需要触发onRefresh回调，并调用ConfigurableApplicationContext的refresh方法）。
 	 * @param parent the parent ApplicationContext to use, or {@code null} if none
 	 * @return the WebApplicationContext for this servlet
 	 * @see org.springframework.web.context.support.XmlWebApplicationContext
@@ -553,9 +547,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		wac.setNamespace(getNamespace());
 		wac.addApplicationListener(new SourceFilteringListener(wac, new ContextRefreshListener()));
 
-		// The wac environment's #initPropertySources will be called in any case when the context
-		// is refreshed; do it eagerly here to ensure servlet property sources are in place for
-		// use in any post-processing or initialization that occurs below prior to #refresh
+		// 在上下文刷新前，初始化web应用上下文环境的属性资源。
+		// 在这里提前调用是为了后续的两个方法可以访问到。
 		ConfigurableEnvironment env = wac.getEnvironment();
 		if (env instanceof ConfigurableWebEnvironment) {
 			((ConfigurableWebEnvironment) env).initPropertySources(getServletContext(), getServletConfig());
