@@ -314,8 +314,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Specify the set of fully-qualified {@link ApplicationContextInitializer} class
-	 * names, per the optional "contextInitializerClasses" servlet init-param.
+	 * 设置ApplicationContextInitializer类全限定名集合
 	 * @see #configureAndRefreshWebApplicationContext(ConfigurableWebApplicationContext)
 	 * @see #applyInitializers(ConfigurableApplicationContext)
 	 */
@@ -324,19 +323,16 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Set whether to publish this servlet's context as a ServletContext attribute,
-	 * available to all objects in the web container. Default is "true".
-	 * <p>This is especially handy during testing, although it is debatable whether
-	 * it's good practice to let other application objects access the context this way.
+	 * 设置当前servlet上下文是否作为ServletContext属性提供给web容器中的所有对象。默认值为true。
+	 * 尽管一直存在争议，这样却非常方便测试，其他的应用对象通过这种方式访问到上下文。
 	 */
 	public void setPublishContext(boolean publishContext) {
 		this.publishContext = publishContext;
 	}
 
 	/**
-	 * Set whether this servlet should publish a ServletRequestHandledEvent at the end
-	 * of each request. Default is "true"; can be turned off for a slight performance
-	 * improvement, provided that no ApplicationListeners rely on such events.
+	 * 设置当前servlet在请求处理后是否触发ServletRequestHandledEvent，默认为true。
+	 * 如果ApplicationListener依赖这类事件，可通过关闭此选项来获取少许的性能提升。
 	 * @see org.springframework.web.context.support.ServletRequestHandledEvent
 	 */
 	public void setPublishEvents(boolean publishEvents) {
@@ -344,65 +340,43 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Set whether to expose the LocaleContext and RequestAttributes as inheritable
-	 * for child threads (using an {@link java.lang.InheritableThreadLocal}).
-	 * <p>Default is "false", to avoid side effects on spawned background threads.
-	 * Switch this to "true" to enable inheritance for custom child threads which
-	 * are spawned during request processing and only used for this request
-	 * (that is, ending after their initial task, without reuse of the thread).
-	 * <p><b>WARNING:</b> Do not use inheritance for child threads if you are
-	 * accessing a thread pool which is configured to potentially add new threads
-	 * on demand (e.g. a JDK {@link java.util.concurrent.ThreadPoolExecutor}),
-	 * since this will expose the inherited context to such a pooled thread.
+	 * 设置是否暴露LocaleContext和RequestAttributes给子线程继承（使用InheritableThreadLocal）。
+	 * 默认为false，避免对生成的后台线程产生影响。
+	 * 设置为true，将允许在请求处理过程中后台生成的自定义子线程继承这些属性，且仅限于此请求使用。
+	 * 也就是说，在请求的初始任务完成后，这些线程不再复用。
+	 * 警告：如果你正在使用线程池，请不要开启子线程继承，因为这将导致继承的上下文会暴露给一个线程池线程，这是非常危险的。
 	 */
 	public void setThreadContextInheritable(boolean threadContextInheritable) {
 		this.threadContextInheritable = threadContextInheritable;
 	}
 
 	/**
-	 * Set whether this servlet should dispatch an HTTP OPTIONS request to
-	 * the {@link #doService} method.
-	 * <p>Default in the {@code FrameworkServlet} is "false", applying
-	 * {@link javax.servlet.http.HttpServlet}'s default behavior (i.e.enumerating
-	 * all standard HTTP request methods as a response to the OPTIONS request).
-	 * Note however that as of 4.3 the {@code DispatcherServlet} sets this
-	 * property to "true" by default due to its built-in support for OPTIONS.
-	 * <p>Turn this flag on if you prefer OPTIONS requests to go through the
-	 * regular dispatching chain, just like other HTTP requests. This usually
-	 * means that your controllers will receive those requests; make sure
-	 * that those endpoints are actually able to handle an OPTIONS request.
-	 * <p>Note that HttpServlet's default OPTIONS processing will be applied
-	 * in any case if your controllers happen to not set the 'Allow' header
-	 * (as required for an OPTIONS response).
+	 * 设置是否将HTTP OPTIONS请求分发给doService方法。
+	 * 默认为false，应用HttpServlet的默认行为（也就是遍历所有的标准HTTP请求方法去响应OPTIONS请求）。
+	 * 注意然而从4.3开始，DispatcherServlet默认已开启，因为它内置了对OPTIONS请求的支持。
+	 * 如果你希望像处理其他HTTP请求一样，可以开启此项将OPTIONS请求加入请求分发链。
+	 * 这也就意味着你的controller会接受到这些请求，不过这里需要保证实际可以处理这些OPTIONS请求。
+	 * 注意当请求一个OPTIONS响应时，如果你的controller恰巧没有设置Allow头，HttpServlet的默认OPTIONS处理过程将会被应用。
 	 */
 	public void setDispatchOptionsRequest(boolean dispatchOptionsRequest) {
 		this.dispatchOptionsRequest = dispatchOptionsRequest;
 	}
 
 	/**
-	 * Set whether this servlet should dispatch an HTTP TRACE request to
-	 * the {@link #doService} method.
-	 * <p>Default is "false", applying {@link javax.servlet.http.HttpServlet}'s
-	 * default behavior (i.e. reflecting the message received back to the client).
-	 * <p>Turn this flag on if you prefer TRACE requests to go through the
-	 * regular dispatching chain, just like other HTTP requests. This usually
-	 * means that your controllers will receive those requests; make sure
-	 * that those endpoints are actually able to handle a TRACE request.
-	 * <p>Note that HttpServlet's default TRACE processing will be applied
-	 * in any case if your controllers happen to not generate a response
-	 * of content type 'message/http' (as required for a TRACE response).
+	 * 设置是否将HTTP TRACE请求分发给doService方法。
+	 * 默认为false，应用HttpServlet的默认行为。
+	 * 如果你希望像处理其他HTTP请求一样，可以开启此项将OPTIONS请求加入请求分发链。
+	 * 这也就意味着你的controller会接受到这些请求，不过这里需要保证实际可以处理这些TRACE请求。
+	 * 注意当请求一个TRACE响应时，如果你的controller恰巧没有设置content type 'message/http'，HttpServlet的默认TRACE处理过程将会被应用。
 	 */
 	public void setDispatchTraceRequest(boolean dispatchTraceRequest) {
 		this.dispatchTraceRequest = dispatchTraceRequest;
 	}
 
 	/**
-	 * Called by Spring via {@link ApplicationContextAware} to inject the current
-	 * application context. This method allows FrameworkServlets to be registered as
-	 * Spring beans inside an existing {@link WebApplicationContext} rather than
-	 * {@link #findWebApplicationContext() finding} a
-	 * {@link org.springframework.web.context.ContextLoaderListener bootstrapped} context.
-	 * <p>Primarily added to support use in embedded servlet containers.
+	 * 通过实现ApplicationContextAware，spring将会调用此方法注入当前应用上下文。Called by Spring via {@link ApplicationContextAware} to inject the current
+	 * FrameworkServlets将会像spring bean一样被注册到一个已存在的web应用上下文当中，而不是通过findWebApplicationContext()方法查找ContextLoaderListener引导获取上下文。
+	 * 主要用于支持内嵌servlet容器。
 	 * @since 4.0
 	 */
 	@Override
@@ -415,8 +389,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 
 	/**
-	 * Overridden method of {@link HttpServletBean}, invoked after any bean properties
-	 * have been set. Creates this servlet's WebApplicationContext.
+	 * 覆写HttpServletBean的方法，在所有bean属性设置后调用，用于创建当前servlet的web应用上下文。
 	 */
 	@Override
 	protected final void initServletBean() throws ServletException {
@@ -443,9 +416,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Initialize and publish the WebApplicationContext for this servlet.
-	 * <p>Delegates to {@link #createWebApplicationContext} for actual creation
-	 * of the context. Can be overridden in subclasses.
+	 * 为当前servlet初始化并发布web应用上下文。
+	 * 交由createWebApplicationContext()实际创建上下文。可在子类中进行覆写。
 	 * @return the WebApplicationContext instance
 	 * @see #FrameworkServlet(WebApplicationContext)
 	 * @see #setContextClass
