@@ -429,16 +429,14 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		WebApplicationContext wac = null;
 
 		if (this.webApplicationContext != null) {
-			// A context instance was injected at construction time -> use it
+			// 构造时注入了上下文实例的话就直接使用它
 			wac = this.webApplicationContext;
 			if (wac instanceof ConfigurableWebApplicationContext) {
 				ConfigurableWebApplicationContext cwac = (ConfigurableWebApplicationContext) wac;
 				if (!cwac.isActive()) {
-					// The context has not yet been refreshed -> provide services such as
-					// setting the parent context, setting the application context id, etc
+					// 如果上下文还没有刷新，那就会执行设置父上下文/设置上下文id等操作。
 					if (cwac.getParent() == null) {
-						// The context instance was injected without an explicit parent -> set
-						// the root application context (if any; may be null) as the parent
+						// 如果上下文实例没有注入显式id，则设置根应用上下文（如果存在，也可能为空）为父上下文。
 						cwac.setParent(rootContext);
 					}
 					configureAndRefreshWebApplicationContext(cwac);
@@ -446,26 +444,22 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 			}
 		}
 		if (wac == null) {
-			// No context instance was injected at construction time -> see if one
-			// has been registered in the servlet context. If one exists, it is assumed
-			// that the parent context (if any) has already been set and that the
-			// user has performed any initialization such as setting the context id
+			// 如果在构造时没有注入上下文实例，则查看servlet上下文中是否有注册。
+			// 如果存在，我们默认它已经指定了父上下文，并且已经初始化例如设置上下文id。
 			wac = findWebApplicationContext();
 		}
 		if (wac == null) {
-			// No context instance is defined for this servlet -> create a local one
+			// 如果在servlet中没有找到，那就创建一个本地上下文。
 			wac = createWebApplicationContext(rootContext);
 		}
 
 		if (!this.refreshEventReceived) {
-			// Either the context is not a ConfigurableApplicationContext with refresh
-			// support or the context injected at construction time had already been
-			// refreshed -> trigger initial onRefresh manually here.
+			// 如果上下文没有实现ConfigurableApplicationContext没有refresh支持或者上下文在构造注入时已经刷新过了，则在这里需要手动触发初始化刷新
 			onRefresh(wac);
 		}
 
 		if (this.publishContext) {
-			// Publish the context as a servlet context attribute.
+			// 发布当前上下文作为servlet上下文属性。
 			String attrName = getServletContextAttributeName();
 			getServletContext().setAttribute(attrName, wac);
 			if (this.logger.isDebugEnabled()) {
@@ -478,12 +472,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Retrieve a {@code WebApplicationContext} from the {@code ServletContext}
-	 * attribute with the {@link #setContextAttribute configured name}. The
-	 * {@code WebApplicationContext} must have already been loaded and stored in the
-	 * {@code ServletContext} before this servlet gets initialized (or invoked).
-	 * <p>Subclasses may override this method to provide a different
-	 * {@code WebApplicationContext} retrieval strategy.
+	 * 使用setContextAttribute配置的名称从ServletContext获取web应用上下文。
+	 * 在servlet被初始化或调用前，web应用上下文必须已经加载并存储到servletContext中。
+	 * 子类可以根据需要覆写这个方法重新定义获取方式。
 	 * @return the WebApplicationContext for this servlet, or {@code null} if not found
 	 * @see #getContextAttribute()
 	 */
