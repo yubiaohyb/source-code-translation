@@ -560,9 +560,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Instantiate the WebApplicationContext for this servlet, either a default
-	 * {@link org.springframework.web.context.support.XmlWebApplicationContext}
-	 * or a {@link #setContextClass custom context class}, if set.
+	 * 通过默认的XmlWebApplicationContext或者通过setContextClass方法设置的自定义的上下文类为servlet初始化web应用上下文。
+	 * 当然，如果是自定义上下文的话，需要实现ConfigurableWebApplicationContext接口。
+	 * 可以在子类中覆写此方法。
 	 * Delegates to #createWebApplicationContext(ApplicationContext).
 	 * @param parent the parent WebApplicationContext to use, or {@code null} if none
 	 * @return the WebApplicationContext for this servlet
@@ -574,14 +574,9 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Post-process the given WebApplicationContext before it is refreshed
-	 * and activated as context for this servlet.
-	 * <p>The default implementation is empty. {@code refresh()} will
-	 * be called automatically after this method returns.
-	 * <p>Note that this method is designed to allow subclasses to modify the application
-	 * context, while {@link #initWebApplicationContext} is designed to allow
-	 * end-users to modify the context through the use of
-	 * {@link ApplicationContextInitializer}s.
+	 * 在web应用上下文刷新正式成为当前servlet的上下文之前，进行后置处理。
+	 * 默认实现为空。refresh()方法将在此方法返回后自动调用。
+	 * 注意此方法被设计用于子类修改应用上下文，尽管已经提供了initWebApplicationContext()供终端用户使用ApplicationContextInitializer进行修改。
 	 * @param wac the configured WebApplicationContext (not refreshed yet)
 	 * @see #createWebApplicationContext
 	 * @see #initWebApplicationContext
