@@ -586,12 +586,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Delegate the WebApplicationContext before it is refreshed to any
-	 * {@link ApplicationContextInitializer} instances specified by the
-	 * "contextInitializerClasses" servlet init-param.
-	 * <p>See also {@link #postProcessWebApplicationContext}, which is designed to allow
-	 * subclasses (as opposed to end-users) to modify the application context, and is
-	 * called immediately before this method.
+	 * 在web应用上下文刷新之前，应用contextInitializerClasses指定初始化器进行配置。
+	 * 也可以查看postProcessWebApplicationContext方法，面向终端用户的子类修改应用上下文，并且在此方法之前被立即调用。
 	 * @param wac the configured WebApplicationContext (not refreshed yet)
 	 * @see #createWebApplicationContext
 	 * @see #postProcessWebApplicationContext
@@ -640,9 +636,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Return the ServletContext attribute name for this servlet's WebApplicationContext.
-	 * <p>The default implementation returns
-	 * {@code SERVLET_CONTEXT_PREFIX + servlet name}.
+	 * 返回servlet的web应用上下文的servlet上下文属性名称。
+	 * 默认实现返回 SERVLET_CONTEXT_PREFIX + servlet name
 	 * @see #SERVLET_CONTEXT_PREFIX
 	 * @see #getServletName
 	 */
@@ -660,17 +655,15 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 
 	/**
-	 * This method will be invoked after any bean properties have been set and
-	 * the WebApplicationContext has been loaded. The default implementation is empty;
-	 * subclasses may override this method to perform any initialization they require.
+	 * 在所有bean属性已设置，且web应用上下文已加载时调用，默认实现为空。
+	 * 子类可以覆写此方法指定自定义初始化需求。
 	 * @throws ServletException in case of an initialization exception
 	 */
 	protected void initFrameworkServlet() throws ServletException {
 	}
 
 	/**
-	 * Refresh this servlet's application context, as well as the
-	 * dependent state of the servlet.
+	 * 可以理解为servlet是有状态的，需要对servlet的上下文进行刷新
 	 * @see #getWebApplicationContext()
 	 * @see org.springframework.context.ConfigurableApplicationContext#refresh()
 	 */
@@ -683,9 +676,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Callback that receives refresh events from this servlet's WebApplicationContext.
-	 * <p>The default implementation calls {@link #onRefresh},
-	 * triggering a refresh of this servlet's context-dependent state.
+	 * 收到来自servlet的web应用上下文刷新事件后进行回调。
+	 * 触发servlet的上下文依赖状态刷新，将会调用默认实现onRefresh。
 	 * @param event the incoming ApplicationContext event
 	 */
 	public void onApplicationEvent(ContextRefreshedEvent event) {
