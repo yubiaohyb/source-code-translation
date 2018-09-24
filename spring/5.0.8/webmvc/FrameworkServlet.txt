@@ -686,18 +686,18 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Template method which can be overridden to add servlet-specific refresh work.
-	 * Called after successful context refresh.
-	 * <p>This implementation is empty.
+	 * 这是一个模版方法，可以被覆写添加一些servlet相关的刷新工作。
+	 * 上下文刷新后调用。
+	 * 默认实现为空。
 	 * @param context the current WebApplicationContext
 	 * @see #refresh()
 	 */
 	protected void onRefresh(ApplicationContext context) {
-		// For subclasses: do nothing by default.
+		// 供子类使用: 默认什么都不干
 	}
 
 	/**
-	 * Close the WebApplicationContext of this servlet.
+	 * 关闭servlet的web应用上下文。
 	 * @see org.springframework.context.ConfigurableApplicationContext#close()
 	 */
 	@Override
@@ -711,7 +711,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 
 
 	/**
-	 * Override the parent class implementation in order to intercept PATCH requests.
+	 * 覆写父类方法实现拦截PATCH请求。
 	 */
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
@@ -727,9 +727,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Delegate GET requests to processRequest/doService.
-	 * <p>Will also be invoked by HttpServlet's default implementation of {@code doHead},
-	 * with a {@code NoBodyResponse} that just captures the content length.
+	 * 将GET请求传给processRequest/doService方法。
+	 * 也会被HttpServlet的doHead的默认实现调用（只有内容长度，没有响应体）。
 	 * @see #doService
 	 * @see #doHead
 	 */
@@ -741,7 +740,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Delegate POST requests to {@link #processRequest}.
+	 * 将POST请求传给processRequest。
 	 * @see #doService
 	 */
 	@Override
@@ -752,7 +751,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Delegate PUT requests to {@link #processRequest}.
+	 * 将PUT请求传给processRequest。
 	 * @see #doService
 	 */
 	@Override
@@ -763,7 +762,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Delegate DELETE requests to {@link #processRequest}.
+	 * 将DELETE请求传给processRequest。
 	 * @see #doService
 	 */
 	@Override
@@ -774,9 +773,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Delegate OPTIONS requests to {@link #processRequest}, if desired.
-	 * <p>Applies HttpServlet's standard OPTIONS processing otherwise,
-	 * and also if there is still no 'Allow' header set after dispatching.
+	 * 如果需要的话，将OPTIONS请求传给processRequest。
+	 * 如果分发时仍然没有设置Allow头，HttpServlet的标准OPTIONS处理过程仍将生效。
 	 * @see #doService
 	 */
 	@Override
@@ -786,12 +784,12 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		if (this.dispatchOptionsRequest || CorsUtils.isPreFlightRequest(request)) {
 			processRequest(request, response);
 			if (response.containsHeader("Allow")) {
-				// Proper OPTIONS response coming from a handler - we're done.
+				// 恰当处理OPTIONS请求，框架已经做了
 				return;
 			}
 		}
 
-		// Use response wrapper in order to always add PATCH to the allowed methods
+		// 使用响应封装添加PATCH的允许方法中。
 		super.doOptions(request, new HttpServletResponseWrapper(response) {
 			@Override
 			public void setHeader(String name, String value) {
@@ -804,8 +802,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Delegate TRACE requests to {@link #processRequest}, if desired.
-	 * <p>Applies HttpServlet's standard TRACE processing otherwise.
+	 * 如果需要，将TRACE请求传给processRequest。
+	 * 否则应用HttpServlet的标准TRACE处理过程。
 	 * @see #doService
 	 */
 	@Override
@@ -823,9 +821,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	}
 
 	/**
-	 * Process this request, publishing an event regardless of the outcome.
-	 * <p>The actual event handling is performed by the abstract
-	 * {@link #doService} template method.
+	 * 处理请求，无论结果如何，发布事件。Process this request, publishing an event regardless of the outcome.
+	 * 实际的事件处理是由抽象模板方法doService执行的。
 	 */
 	protected final void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
