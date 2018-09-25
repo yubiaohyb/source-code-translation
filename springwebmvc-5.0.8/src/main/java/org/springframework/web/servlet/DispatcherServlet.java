@@ -61,17 +61,26 @@ import org.springframework.web.util.NestedServletException;
 import org.springframework.web.util.WebUtils;
 
 /**
+ * HTTP请求处理器或控制器的中央分发器，例如web UI控制器或者基于HTTP的远程服务提供者。
+ * 分发web请求给已注册处理器进行处理，同时提供了便捷的映射和异常处理基础。
  * Central dispatcher for HTTP request handlers/controllers, e.g. for web UI controllers
  * or HTTP-based remote service exporters. Dispatches to registered handlers for processing
  * a web request, providing convenient mapping and exception handling facilities.
  *
+ * DispatcherServlet非常灵活：安装配置合适的适配器类就可以配合任何的工作流使用。
+ * 相较于其他的请求驱动的web MVC框架，它具有以下特点：
  * <p>This servlet is very flexible: It can be used with just about any workflow, with the
  * installation of the appropriate adapter classes. It offers the following functionality
  * that distinguishes it from other request-driven web MVC frameworks:
  *
+ * 它是基于JavaBeans配置机制的。
  * <ul>
  * <li>It is based around a JavaBeans configuration mechanism.
  *
+ * 它可以使用任何一个（内置或作为应用程序一部分的提供的）处理器映射实现来控制请求到处理器对象的路由。
+ * 默认BeanNameUrlHandlerMapping和RequestMappingHandlerMapping。
+ * 如果需要的话，可以定义一个处理器映射对象实现HandlerMapping接口，覆盖默认实现，然后作为bean注入到servlet的应用上下文中。
+ * 处理器映射的bean名称可以任意指定（因为他们是按类型进行测试的）。
  * <li>It can use any {@link HandlerMapping} implementation - pre-built or provided as part
  * of an application - to control the routing of requests to handler objects. Default is
  * {@link org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping} and
