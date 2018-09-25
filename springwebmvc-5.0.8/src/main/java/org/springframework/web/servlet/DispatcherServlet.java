@@ -911,6 +911,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+     * 返回在web应用上下文中根据类型探测到的或者基于分发器属性文件默认策略集合初始化得到的处理器映射bean。
+     * 注意：在调用onRefresh方法前可能返回null。
 	 * Return the configured {@link HandlerMapping} beans that were detected by
 	 * type in the {@link WebApplicationContext} or initialized based on the
 	 * default set of strategies from {@literal DispatcherServlet.properties}.
@@ -926,7 +928,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Return the default strategy object for the given strategy interface.
+	 * 返回给定策略接口的默认策略对象。
+     * 默认实现返回当前列表的第一个实现。
+     * Return the default strategy object for the given strategy interface.
 	 * <p>The default implementation delegates to {@link #getDefaultStrategies},
 	 * expecting a single object in the list.
 	 * @param context the current WebApplicationContext
@@ -944,7 +948,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Create a List of default strategy objects for the given strategy interface.
+	 * 为给定策略接口创建一个含有默认策略对象的列表
+     * 默认实现由分发器属性文件中的类名决定，然后通过应用上下文的bean工厂接口实例化策略对象。
+     * Create a List of default strategy objects for the given strategy interface.
 	 * <p>The default implementation uses the "DispatcherServlet.properties" file (in the same
 	 * package as the DispatcherServlet class) to determine the class names. It instantiates
 	 * the strategy objects through the context's BeanFactory.
@@ -984,6 +990,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+     * 创建默认策略
 	 * Create a default strategy.
 	 * <p>The default implementation uses
 	 * {@link org.springframework.beans.factory.config.AutowireCapableBeanFactory#createBean}.
@@ -999,7 +1006,8 @@ public class DispatcherServlet extends FrameworkServlet {
 
 
 	/**
-	 * Exposes the DispatcherServlet-specific request attributes and delegates to {@link #doDispatch}
+	 * 暴露分发器特有的请求属性，并将请求转由doDispatch实际分发。
+     * Exposes the DispatcherServlet-specific request attributes and delegates to {@link #doDispatch}
 	 * for the actual dispatching.
 	 */
 	@Override
@@ -1010,6 +1018,7 @@ public class DispatcherServlet extends FrameworkServlet {
 					" processing " + request.getMethod() + " request for [" + getRequestUri(request) + "]");
 		}
 
+		// 在有内含请求时保存一份请求属性快照，方便在之后重置源属性
 		// Keep a snapshot of the request attributes in case of an include,
 		// to be able to restore the original attributes after the include.
 		Map<String, Object> attributesSnapshot = null;
@@ -1024,6 +1033,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 		}
 
+		// 将框架对象提供给处理器和视图对象
 		// Make framework objects available to handlers and view objects.
 		request.setAttribute(WEB_APPLICATION_CONTEXT_ATTRIBUTE, getWebApplicationContext());
 		request.setAttribute(LOCALE_RESOLVER_ATTRIBUTE, this.localeResolver);
@@ -1044,6 +1054,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 		finally {
 			if (!WebAsyncUtils.getAsyncManager(request).isConcurrentHandlingStarted()) {
+			    // 重置源请求属性快照
 				// Restore the original attribute snapshot, in case of an include.
 				if (attributesSnapshot != null) {
 					restoreAttributesAfterInclude(request, attributesSnapshot);
@@ -1053,6 +1064,10 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+     * 实际分发到处理器
+     * 处理器映射会按照servlet中处理器映射列表的顺序去申请获取。
+     * 而处理器适配器则会查询servlet已装的处理器适配器列表找到第一个支持当前处理器类的。
+     * 所有的HTTP请求方法都会由当前方法处理。由处理器适配器或者处理器自己决定接受何种请求方法。
 	 * Process the actual dispatching to the handler.
 	 * <p>The handler will be obtained by applying the servlet's HandlerMappings in order.
 	 * The HandlerAdapter will be obtained by querying the servlet's installed HandlerAdapters
@@ -1088,6 +1103,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				// Determine handler adapter for the current request.
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
+				// 如果当前处理器支持最后修改请求头，则去设置
 				// Process last-modified header, if supported by the handler.
 				String method = request.getMethod();
 				boolean isGet = "GET".equals(method);
@@ -1119,6 +1135,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				dispatchException = ex;
 			}
 			catch (Throwable err) {
+			    // 从4.3开始，抛出的来自处理器方法的Errors对于@ExceptionHandler标注的方法以及其他的场景同样可见。
 				// As of 4.3, we're processing Errors thrown from handler methods as well,
 				// making them available for @ExceptionHandler methods and other scenarios.
 				dispatchException = new NestedServletException("Handler dispatch failed", err);
@@ -1134,12 +1151,14 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 		finally {
 			if (asyncManager.isConcurrentHandlingStarted()) {
+			    // 替换处理后置和完成后方法
 				// Instead of postHandle and afterCompletion
 				if (mappedHandler != null) {
 					mappedHandler.applyAfterConcurrentHandlingStarted(processedRequest, response);
 				}
 			}
 			else {
+			    // 清理上传文件请求使用的资源
 				// Clean up any resources used by a multipart request.
 				if (multipartRequestParsed) {
 					cleanupMultipart(processedRequest);
@@ -1149,6 +1168,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+     * 是否需要视图名称转换
 	 * Do we need view name translation?
 	 */
 	private void applyDefaultViewName(HttpServletRequest request, @Nullable ModelAndView mv) throws Exception {
@@ -1161,6 +1181,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+     * 处理要么一个ModelAndView，要么将要解析为ModelAndView的异常的处理器选择/调用的结果。
 	 * Handle the result of handler selection and handler invocation, which is
 	 * either a ModelAndView or an Exception to be resolved to a ModelAndView.
 	 */
@@ -1182,6 +1203,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			}
 		}
 
+		// 是否处理器返回一个要渲染的视图
 		// Did the handler return a view to render?
 		if (mv != null && !mv.wasCleared()) {
 			render(mv, request, response);
@@ -1197,6 +1219,7 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 
 		if (WebAsyncUtils.getAsyncManager(request).isConcurrentHandlingStarted()) {
+		    // 在跳转过程中发生并发处理
 			// Concurrent handling started during a forward
 			return;
 		}
@@ -1207,6 +1230,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+     * 根据给定请求构造本地化上下文，使用请求的初始本地信息作为当前本地信息。
+     * 默认使用分发器的本地化解析器获取当前本地信息，这个可能在一个请求的生命周期中会变化。
 	 * Build a LocaleContext for the given request, exposing the request's primary locale as current locale.
 	 * <p>The default implementation uses the dispatcher's LocaleResolver to obtain the current locale,
 	 * which might change during a request.
@@ -1225,7 +1250,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Convert the request into a multipart request, and make multipart resolver available.
+	 * 将请求转换为上传文件请求方便获取文件上传解析器
+     * 如果没设置文件上传解析器，那就是只有简单地处理请求。
+     * Convert the request into a multipart request, and make multipart resolver available.
 	 * <p>If no multipart resolver is set, simply use the existing request.
 	 * @param request current HTTP request
 	 * @return the processed request (multipart wrapper if necessary)
@@ -1256,6 +1283,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 			}
 		}
+		// 如果前面没有返回，则返回源请求
 		// If not returned before: return original request.
 		return request;
 	}
@@ -1290,7 +1318,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Return the HandlerExecutionChain for this request.
+	 * 返回当前请求的处理器执行链
+     * 按顺序尝试所有处理器
+     * Return the HandlerExecutionChain for this request.
 	 * <p>Tries all handler mappings in order.
 	 * @param request current HTTP request
 	 * @return the HandlerExecutionChain, or {@code null} if no handler could be found
@@ -1313,7 +1343,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * No handler found -> set appropriate HTTP response status.
+	 * 没有找到处理器时，设置一个合适的HTTP响应状态码
+     * No handler found -> set appropriate HTTP response status.
 	 * @param request current HTTP request
 	 * @param response current HTTP response
 	 * @throws Exception if preparing the response failed
@@ -1333,7 +1364,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Return the HandlerAdapter for this handler object.
+	 * 返回处理器的适配器
+     * Return the HandlerAdapter for this handler object.
 	 * @param handler the handler object to find an adapter for
 	 * @throws ServletException if no HandlerAdapter can be found for the handler. This is a fatal error.
 	 */
@@ -1353,7 +1385,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * Determine an error ModelAndView via the registered HandlerExceptionResolvers.
+	 * 通过已注册的处理器异常解析器列表决定返回的异常ModelAndView
+     * Determine an error ModelAndView via the registered HandlerExceptionResolvers.
 	 * @param request current HTTP request
 	 * @param response current HTTP response
 	 * @param handler the executed handler, or {@code null} if none chosen at the time of the exception
@@ -1399,6 +1432,8 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+     * 渲染给定的ModelAndView
+     * 这是处理请求的最后一步，可能会按名解析视图。
 	 * Render the given ModelAndView.
 	 * <p>This is the last stage in handling a request. It may involve resolving the view by name.
 	 * @param mv the ModelAndView to render
@@ -1452,6 +1487,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+     * 转换给定的请求到一个默认的视图名称
 	 * Translate the supplied request into a default view name.
 	 * @param request current HTTP servlet request
 	 * @return the view name (or {@code null} if no default found)
@@ -1463,6 +1499,9 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+     * 根据视图名解析（要渲染的）视图对象
+     * 默认实现会查询分发器的所有视图解析器。
+     * 可以根据特定的模型属性或请求参数来自定义解析策略。
 	 * Resolve the given view name into a View object (to be rendered).
 	 * <p>The default implementations asks all ViewResolvers of this dispatcher.
 	 * Can be overridden for custom resolution strategies, potentially based on
@@ -1473,6 +1512,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @param request current HTTP servlet request
 	 * @return the View object, or {@code null} if none found
 	 * @throws Exception if the view cannot be resolved
+     * 通常在创建实际视图对象时出现来问题
 	 * (typically in case of problems creating an actual View object)
 	 * @see ViewResolver#resolveViewName
 	 */
