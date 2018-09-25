@@ -10,8 +10,8 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="source-code-translation" target="1.7" />
-      <module name="springwebmvc-5.0.8" target="1.7" />
+      <module name="source-code-translation" target="1.8" />
+      <module name="springwebmvc-5.0.8" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
