@@ -3,6 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/source-code-translation.iml" filepath="$PROJECT_DIR$/.idea/source-code-translation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springbeans-5.0.8/springbeans-5.0.8.iml" filepath="$PROJECT_DIR$/springbeans-5.0.8/springbeans-5.0.8.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springcontext-5.0.8/springcontext-5.0.8.iml" filepath="$PROJECT_DIR$/springcontext-5.0.8/springcontext-5.0.8.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springcontextsupport-5.0.8/springcontextsupport-5.0.8.iml" filepath="$PROJECT_DIR$/springcontextsupport-5.0.8/springcontextsupport-5.0.8.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springcore-5.0.8/springcore-5.0.8.iml" filepath="$PROJECT_DIR$/springcore-5.0.8/springcore-5.0.8.iml" />
       <module fileurl="file://$PROJECT_DIR$/springwebmvc-5.0.8/springwebmvc-5.0.8.iml" filepath="$PROJECT_DIR$/springwebmvc-5.0.8/springwebmvc-5.0.8.iml" />
     </modules>
   </component>

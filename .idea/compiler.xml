@@ -6,12 +6,20 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="springbeans-5.0.8" />
+        <module name="springcontext-5.0.8" />
+        <module name="springcontextsupport-5.0.8" />
+        <module name="springcore-5.0.8" />
         <module name="springwebmvc-5.0.8" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="source-code-translation" target="1.8" />
-      <module name="springwebmvc-5.0.8" target="1.8" />
+      <module name="source-code-translation" target="1.7" />
+      <module name="springbeans-5.0.8" target="1.7" />
+      <module name="springcontext-5.0.8" target="1.7" />
+      <module name="springcontextsupport-5.0.8" target="1.7" />
+      <module name="springcore-5.0.8" target="1.7" />
+      <module name="springwebmvc-5.0.8" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
