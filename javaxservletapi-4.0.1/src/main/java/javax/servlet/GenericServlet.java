@@ -23,15 +23,21 @@ import java.util.ResourceBundle;
 
 /**
  *
+ * 定义了一个通用，与协议无关的servlet。
+ * 如果想写一个Web上使用的HTTP协议的servlet，可以继承HttpServlet。
  * Defines a generic, protocol-independent
  * servlet. To write an HTTP servlet for use on the
  * Web, extend {@link javax.servlet.http.HttpServlet} instead.
  *
+ * GenericServlet实现了Servlet和ServletConfig接口。
+ * 虽然继承一个指定协议的子类例如HttpServlet更常见，但是直接继承GenericServlet也是可以的。
  * <p><code>GenericServlet</code> implements the <code>Servlet</code>
  * and <code>ServletConfig</code> interfaces. <code>GenericServlet</code>
  * may be directly extended by a servlet, although it's more common to extend
  * a protocol-specific subclass such as <code>HttpServlet</code>.
  *
+ * GenericServlet简化了servlet的编写，提供了servlet接口生命周期方法以及servletConfig接口方法的简化版本，
+ * 同时还实现了在servletContext声明的log方法。
  * <p><code>GenericServlet</code> makes writing servlets
  * easier. It provides simple versions of the lifecycle methods 
  * <code>init</code> and <code>destroy</code> and of the methods 
@@ -39,6 +45,7 @@ import java.util.ResourceBundle;
  * also implements the <code>log</code> method, declared in the
  * <code>ServletContext</code> interface. 
  *
+ * 写一个通用的servlet，现在你只需要简单覆盖抽象方法service就可以了。
  * <p>To write a generic servlet, you need only
  * override the abstract <code>service</code> method. 
  *
@@ -59,6 +66,7 @@ public abstract class GenericServlet
 
     /**
      *
+     * 什么都不做。servlet的所有初始化工作由init方法完成。
      * Does nothing. All of the servlet initialization
      * is done by one of the <code>init</code> methods.
      *
@@ -67,6 +75,7 @@ public abstract class GenericServlet
     
     
     /**
+     * servlet容器调用此方法将servlet移出服务
      * Called by the servlet container to indicate to a servlet that the
      * servlet is being taken out of service.  See {@link Servlet#destroy}.
      *
@@ -77,11 +86,13 @@ public abstract class GenericServlet
     
     
     /**
+     * 根据名称获取初始化参数值
      * Returns a <code>String</code> containing the value of the named
      * initialization parameter, or <code>null</code> if the parameter does
      * not exist.  See {@link ServletConfig#getInitParameter}.
      *
-     * <p>This method is supplied for convenience. It gets the 
+     * 提供这个方法是为了简化从servletConfig获取初始化参数值
+     * <p>This method is supplied for convenience. It gets the
      * value of the named parameter from the servlet's 
      * <code>ServletConfig</code> object.
      *
@@ -104,13 +115,15 @@ public abstract class GenericServlet
     
     
    /**
-    * Returns the names of the servlet's initialization parameters 
+    * 返回初始化参数名集合
+    * Returns the names of the servlet's initialization parameters
     * as an <code>Enumeration</code> of <code>String</code> objects,
     * or an empty <code>Enumeration</code> if the servlet has no
     * initialization parameters.  See {@link
     * ServletConfig#getInitParameterNames}.
     *
-    * <p>This method is supplied for convenience. It gets the 
+    * 同样是为了简化访问
+    * <p>This method is supplied for convenience. It gets the
     * parameter names from the servlet's <code>ServletConfig</code> object. 
     *
     *
@@ -130,6 +143,7 @@ public abstract class GenericServlet
      
 
     /**
+     * 返回servlet的ServletConfig
      * Returns this servlet's {@link ServletConfig} object.
      *
      * @return ServletConfig 	the <code>ServletConfig</code> object
@@ -141,10 +155,12 @@ public abstract class GenericServlet
  
     
     /**
+     * 返回servlet运行所处的运行上下文
      * Returns a reference to the {@link ServletContext} in which this servlet
      * is running.  See {@link ServletConfig#getServletContext}.
      *
-     * <p>This method is supplied for convenience. It gets the 
+     * 简化从ServletConfig处对ServletContext的获取
+     * <p>This method is supplied for convenience. It gets the
      * context from the servlet's <code>ServletConfig</code> object.
      *
      *
@@ -164,7 +180,9 @@ public abstract class GenericServlet
 
 
     /**
-     * Returns information about the servlet, such as 
+     * 返回servlet默认信息，例如作者、版本、版权。
+     * 默认返回空字符串，覆盖此方法返回一个有意义的值。
+     * Returns information about the servlet, such as
      * author, version, and copyright. 
      * By default, this method returns an empty string.  Override this method
      * to have it return a meaningful value.  See {@link
@@ -180,9 +198,12 @@ public abstract class GenericServlet
 
 
     /**
+     * servlet容器调用此方法配置提供服务的servlet
      * Called by the servlet container to indicate to a servlet that the
      * servlet is being placed into service.  See {@link Servlet#init}.
      *
+     * 实现中保存了ServletConfig对象，方便后续需要的时候使用。
+     * 覆写方法时调用super.init(config)
      * <p>This implementation stores the {@link ServletConfig}
      * object it receives from the servlet container for later use.
      * When overriding this form of the method, call 
@@ -199,15 +220,18 @@ public abstract class GenericServlet
      * @see 				UnavailableException
      */
     public void init(ServletConfig config) throws ServletException {
-	this.config = config;
-	this.init();
+	      this.config = config;
+	      this.init();
     }
 
 
     /**
+     * 方法可被覆写，简化对super.init(config)调用
      * A convenience method which can be overridden so that there's no need
      * to call <code>super.init(config)</code>.
      *
+     * 简单地覆盖这个方法，方法会被GenericServlet.init(ServletConfig config)调用，而不是去覆写init(ServletConfig)。
+     * ServletConfig对象保存了下来，我们仍然可以通过getServletConfig方法取得。
      * <p>Instead of overriding {@link #init(ServletConfig)}, simply override
      * this method and it will be called by
      * <code>GenericServlet.init(ServletConfig config)</code>.
@@ -224,6 +248,7 @@ public abstract class GenericServlet
     
 
     /**
+     * 添加指定信息到servlet日志文件中，以servlet名称开头。
      * Writes the specified message to a servlet log file, prepended by the
      * servlet's name.  See {@link ServletContext#log(String)}.
      *
@@ -236,6 +261,7 @@ public abstract class GenericServlet
    
    
     /**
+     * 为异常添加解释性信息和栈路径到servlet日志文件中，以servlet名称开头。
      * Writes an explanatory message and a stack trace
      * for a given <code>Throwable</code> exception
      * to the servlet log file, prepended by the servlet's name.
@@ -249,15 +275,17 @@ public abstract class GenericServlet
      * 				or exception
      */   
     public void log(String message, Throwable t) {
-	getServletContext().log(getServletName() + ": " + message, t);
+	      getServletContext().log(getServletName() + ": " + message, t);
     }
     
     
     /**
+     * servlet容器会调用此方法允许servlet响应请求
      * Called by the servlet container to allow the servlet to respond to
      * a request.  See {@link Servlet#service}.
      * 
-     * <p>This method is declared abstract so subclasses, such as 
+     * 本方法被声明为抽象，因此子类如HttpServlet必须覆盖它。
+     * <p>This method is declared abstract so subclasses, such as
      * <code>HttpServlet</code>, must override it.
      *
      * @param req 	the <code>ServletRequest</code> object
@@ -279,6 +307,7 @@ public abstract class GenericServlet
     
 
     /**
+     * 返回servlet实例名称
      * Returns the name of this servlet instance.
      * See {@link ServletConfig#getServletName}.
      *

@@ -69,7 +69,7 @@ import java.io.IOException;
 public interface Servlet {
 
     /**
-     * servlet容器调用此方法指定提供服务的servlet
+     * servlet容器调用此方法配置提供服务的servlet
      * Called by the servlet container to indicate to a servlet that the
      * servlet is being placed into service.
      *
