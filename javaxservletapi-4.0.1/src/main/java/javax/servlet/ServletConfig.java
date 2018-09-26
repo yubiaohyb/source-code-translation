@@ -41,6 +41,7 @@ import java.util.Enumeration;
 
 
     /**
+     * 返回调用方的ServletContext，方便与servlet容器交互
      * Returns a reference to the {@link ServletContext} in which the caller
      * is executing.
      *
@@ -53,6 +54,8 @@ import java.util.Enumeration;
 
     
     /**
+     * 根据名称获取初始化参数值
+     * 如果没有返回null
      * Gets the value of the initialization parameter with the given name.
      *
      * @param name the name of the initialization parameter whose value to
@@ -66,6 +69,8 @@ import java.util.Enumeration;
 
 
     /**
+     * 将初始化参数名称作为Enumeration<String>元素返回
+     * 如果没有，则返回一个空集合
      * Returns the names of the servlet's initialization parameters
      * as an <code>Enumeration</code> of <code>String</code> objects, 
      * or an empty <code>Enumeration</code> if the servlet has

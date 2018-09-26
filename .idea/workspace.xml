@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d52928ca-1079-4e4a-92dd-2bd1cf4e108a" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/javaxservletapi-4.0.1/javaxservletapi-4.0.1.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/javaxservletapi-4.0.1/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Maven__javax_servlet_javax_servlet_api_4_0_1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/springwebmvc-5.0.8/springwebmvc-5.0.8.iml" beforeDir="false" afterPath="$PROJECT_DIR$/springwebmvc-5.0.8/springwebmvc-5.0.8.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/Servlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/Servlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/ServletConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/ServletConfig.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <ignored path="$PROJECT_DIR$/springwebmvc-5.0.8/target/" />
@@ -88,52 +83,25 @@
         <entry file="file://$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/GenericServlet.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="252">
-              <caret line="50" column="31" selection-start-line="50" selection-start-column="31" selection-end-line="50" selection-end-column="31" />
+              <caret line="50" column="18" lean-forward="true" selection-start-line="50" selection-start-column="18" selection-end-line="50" selection-end-column="18" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ServletConfig.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Servlet.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/Servlet.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1113">
+              <caret line="68" column="24" selection-start-line="68" selection-start-column="17" selection-end-line="68" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ServletConfig.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/ServletConfig.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="336">
-              <caret line="31" column="7" selection-start-line="31" selection-start-column="7" selection-end-line="31" selection-end-column="7" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Serializable.java" pinned="false" current-in-tab="false">
-        <entry file="jar://D:/JDK/jdk1.8.0_172/src.zip!/java/io/Serializable.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3045">
-              <caret line="168" column="17" selection-start-line="168" selection-start-column="17" selection-end-line="168" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EnvironmentAware.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/springcontext-5.0.8/src/main/java/org/springframework/context/EnvironmentAware.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="26" column="22" selection-start-line="26" selection-start-column="17" selection-end-line="26" selection-end-column="22" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/javaxservletapi-4.0.1/pom.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1120">
-              <caret line="126" column="25" lean-forward="true" selection-start-line="126" selection-start-column="25" selection-end-line="126" selection-end-column="25" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EnvironmentCapable.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/springcore-5.0.8/src/main/java/org/springframework/core/env/EnvironmentCapable.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="591">
-              <caret line="50" column="11" selection-start-line="50" selection-start-column="5" selection-end-line="50" selection-end-column="11" />
+            <state relative-caret-position="777">
+              <caret line="52" column="25" selection-start-line="52" selection-start-column="11" selection-end-line="52" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -160,6 +128,7 @@
         <option value="$PROJECT_DIR$/springcontext-5.0.8/src/main/java/org/springframework/context/EnvironmentAware.java" />
         <option value="$PROJECT_DIR$/javaxservletapi-4.0.1/pom.xml" />
         <option value="$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/ServletConfig.java" />
+        <option value="$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/Servlet.java" />
       </list>
     </option>
   </component>
@@ -572,11 +541,18 @@
       <option name="project" value="LOCAL" />
       <updated>1537932247828</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="修改：添加javaxservletapi并添加部分翻译">
+      <created>1537937972698</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1537937972698</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="25252000" />
+    <option name="totallyTimeSpent" value="33315000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -679,16 +655,15 @@
     <MESSAGE value="修改：调整成maven项目" />
     <MESSAGE value="修改：dispatcherServlet添加注释" />
     <MESSAGE value="修改：EnvironmentCapable添加注释；&#10;     并添加其他几个spring模板" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改：EnvironmentCapable添加注释；&#10;     并添加其他几个spring模板" />
+    <MESSAGE value="修改：添加javaxservletapi并添加部分翻译" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改：添加javaxservletapi并添加部分翻译" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="2" />
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/springwebmvc-5.0.8/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3951">
-          <caret line="302" column="17" selection-start-line="302" selection-start-column="17" selection-end-line="302" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$MAVEN_REPOSITORY$/javax/servlet/javax.servlet-api/4.0.1/javax.servlet-api-4.0.1-sources.jar!/javax/servlet/http/HttpServlet.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1029">
@@ -951,17 +926,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/GenericServlet.java">
+    <entry file="file://$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/ServletConfig.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="50" column="31" selection-start-line="50" selection-start-column="31" selection-end-line="50" selection-end-column="31" />
+        <state relative-caret-position="777">
+          <caret line="52" column="25" selection-start-line="52" selection-start-column="11" selection-end-line="52" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/ServletConfig.java">
+    <entry file="file://$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/GenericServlet.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="31" column="7" selection-start-line="31" selection-start-column="7" selection-end-line="31" selection-end-column="7" />
+        <state relative-caret-position="252">
+          <caret line="50" column="18" lean-forward="true" selection-start-line="50" selection-start-column="18" selection-end-line="50" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/javaxservletapi-4.0.1/src/main/java/javax/servlet/Servlet.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1113">
+          <caret line="68" column="24" selection-start-line="68" selection-start-column="17" selection-end-line="68" selection-end-column="24" />
         </state>
       </provider>
     </entry>
