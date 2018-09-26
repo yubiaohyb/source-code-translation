@@ -159,6 +159,8 @@ public class HandlerExecutionChain {
 	}
 
 	/**
+	 * 触发相应的处理器拦截器上的afterCompletion回调。
+	 * 只会逆序调用那些已经成功调用了preHandle方法并返回true的处理器拦截器的afterCompletion方法。
 	 * Trigger afterCompletion callbacks on the mapped HandlerInterceptors.
 	 * Will just invoke afterCompletion for all interceptors whose preHandle invocation
 	 * has successfully completed and returned true.
@@ -181,6 +183,7 @@ public class HandlerExecutionChain {
 	}
 
 	/**
+	 * 在相应的异步处理器拦截器上执行afterConcurrentHandlerStarted回调。
 	 * Apply afterConcurrentHandlerStarted callback on mapped AsyncHandlerInterceptors.
 	 */
 	void applyAfterConcurrentHandlingStarted(HttpServletRequest request, HttpServletResponse response) {

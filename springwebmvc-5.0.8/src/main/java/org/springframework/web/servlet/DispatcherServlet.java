@@ -1007,7 +1007,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 	/**
 	 * 暴露分发器特有的请求属性，并将请求转由doDispatch实际分发。
-     * Exposes the DispatcherServlet-specific request attributes and delegates to {@link #doDispatch}
+	 * Exposes the DispatcherServlet-specific request attributes and delegates to {@link #doDispatch}
 	 * for the actual dispatching.
 	 */
 	@Override
@@ -1064,10 +1064,10 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-     * 实际分发到处理器
-     * 处理器映射会按照servlet中处理器映射列表的顺序去申请获取。
-     * 而处理器适配器则会查询servlet已装的处理器适配器列表找到第一个支持当前处理器类的。
-     * 所有的HTTP请求方法都会由当前方法处理。由处理器适配器或者处理器自己决定接受何种请求方法。
+	 * 实际分发到处理器
+	 * 处理器映射会按照servlet中处理器映射列表的顺序去申请获取。
+	 * 而处理器适配器则会查询servlet已装的处理器适配器列表找到第一个支持当前处理器类的。
+	 * 所有的HTTP请求方法都会由当前方法处理。由处理器适配器或者处理器自己决定接受何种请求方法。
 	 * Process the actual dispatching to the handler.
 	 * <p>The handler will be obtained by applying the servlet's HandlerMappings in order.
 	 * The HandlerAdapter will be obtained by querying the servlet's installed HandlerAdapters
@@ -1158,7 +1158,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				}
 			}
 			else {
-			    // 清理上传文件请求使用的资源
+			    // 释放上传文件请求占用的资源
 				// Clean up any resources used by a multipart request.
 				if (multipartRequestParsed) {
 					cleanupMultipart(processedRequest);
@@ -1303,6 +1303,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
+	 * 如果给定的上传文件请求存在资源占用，则释放
 	 * Clean up any resources used by the given multipart request (if any).
 	 * @param request current HTTP request
 	 * @see MultipartResolver#cleanupMultipart
