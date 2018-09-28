@@ -150,7 +150,7 @@ public abstract class GenericServlet
      *				that initialized this servlet
      */    
     public ServletConfig getServletConfig() {
-	return config;
+	    return config;
     }
  
     
