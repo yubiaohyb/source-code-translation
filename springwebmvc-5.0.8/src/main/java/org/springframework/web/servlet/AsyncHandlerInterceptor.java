@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.method.HandlerMethod;
 
 /**
+ * 扩展HandlerInterceptor添加来一个在异步请求处理开始后执行的回调函数。
  * Extends {@code HandlerInterceptor} with a callback method invoked after the
  * start of asynchronous request handling.
  *
