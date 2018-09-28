@@ -172,8 +172,8 @@ import org.springframework.web.util.WebUtils;
  * is defined as well - provided that you intend to use {@code @RequestMapping}.
  *
  * web应用程序可以定义多个分发器。
- * 每个分发器根据映射/处理器等设置加载自身的应用上下文，工作在自己的命名空间下面。
- * 只有ContextLoaderListener加载根应用上下文会被共享。
+ * 每个分发器根据映射/处理器等设置加载自身的应用上下文后，工作在自己所属的命名空间下面。
+ * 只有ContextLoaderListener加载的根应用上下文会被共享。
  * <p><b>A web application can define any number of DispatcherServlets.</b>
  * Each servlet will operate in its own namespace, loading its own application context
  * with mappings, handlers, etc. Only the root application context as loaded by
@@ -246,7 +246,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	public static final String FLASH_MAP_MANAGER_BEAN_NAME = "flashMapManager";
 
 	/**
-     * 持有当前web应用上下文的请求属性
+     * 表示当前web应用上下文的请求属性
      * 否则根据标签只能取到全局web应用上下文
 	 * Request attribute to hold the current web application context.
 	 * Otherwise only the global web app context is obtainable by tags etc.
@@ -255,26 +255,28 @@ public class DispatcherServlet extends FrameworkServlet {
 	public static final String WEB_APPLICATION_CONTEXT_ATTRIBUTE = DispatcherServlet.class.getName() + ".CONTEXT";
 
 	/**
-	 * 持有当前本地化解析器的请求属性，可以根据视图再次取得
+	 * 表示当前本地化解析器的请求属性，提供给视图使用
      * Request attribute to hold the current LocaleResolver, retrievable by views.
 	 * @see org.springframework.web.servlet.support.RequestContextUtils#getLocaleResolver
 	 */
 	public static final String LOCALE_RESOLVER_ATTRIBUTE = DispatcherServlet.class.getName() + ".LOCALE_RESOLVER";
 
 	/**
+	 * 表示当前主题解析器的请求属性，提供给视图使用
 	 * Request attribute to hold the current ThemeResolver, retrievable by views.
 	 * @see org.springframework.web.servlet.support.RequestContextUtils#getThemeResolver
 	 */
 	public static final String THEME_RESOLVER_ATTRIBUTE = DispatcherServlet.class.getName() + ".THEME_RESOLVER";
 
 	/**
+	 * 表示当前主题来源的请求属性，提供给视图使用
 	 * Request attribute to hold the current ThemeSource, retrievable by views.
 	 * @see org.springframework.web.servlet.support.RequestContextUtils#getThemeSource
 	 */
 	public static final String THEME_SOURCE_ATTRIBUTE = DispatcherServlet.class.getName() + ".THEME_SOURCE";
 
 	/**
-	 * 持有只读闪存的上个请求的请求属性名称
+	 * 表示上次请求保存的只读闪存的请求属性
      * Name of request attribute that holds a read-only {@code Map<String,?>}
 	 * with "input" flash attributes saved by a previous request, if any.
 	 * @see org.springframework.web.servlet.support.RequestContextUtils#getInputFlashMap(HttpServletRequest)
@@ -282,7 +284,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	public static final String INPUT_FLASH_MAP_ATTRIBUTE = DispatcherServlet.class.getName() + ".INPUT_FLASH_MAP";
 
 	/**
-	 * 持有提供给后续请求输出闪存的请求属性名称
+	 * 表示保存提供给后续请求的闪存的请求属性
      * Name of request attribute that holds the "output" {@link FlashMap} with
 	 * attributes to save for a subsequent request.
 	 * @see org.springframework.web.servlet.support.RequestContextUtils#getOutputFlashMap(HttpServletRequest)
@@ -290,14 +292,14 @@ public class DispatcherServlet extends FrameworkServlet {
 	public static final String OUTPUT_FLASH_MAP_ATTRIBUTE = DispatcherServlet.class.getName() + ".OUTPUT_FLASH_MAP";
 
 	/**
-	 * 持有闪存管理器的请求属性名称
+	 * 表示闪存管理器的请求属性
      * Name of request attribute that holds the {@link FlashMapManager}.
 	 * @see org.springframework.web.servlet.support.RequestContextUtils#getFlashMapManager(HttpServletRequest)
 	 */
 	public static final String FLASH_MAP_MANAGER_ATTRIBUTE = DispatcherServlet.class.getName() + ".FLASH_MAP_MANAGER";
 
 	/**
-	 * HandlerExceptionResolver解析异常却没有无法渲染视图（例如设置状态码）时的请求属性
+	 * HandlerExceptionResolver解析异常不渲染视图（例如设置状态码）时的请求属性
      * Name of request attribute that exposes an Exception resolved with an
 	 * {@link HandlerExceptionResolver} but where no view was rendered
 	 * (e.g. setting the status code).
@@ -305,7 +307,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	public static final String EXCEPTION_ATTRIBUTE = DispatcherServlet.class.getName() + ".EXCEPTION";
 
 	/**
-     * 当请求没有找到相应的处理器时使用的log分类
+     * 当请求没有找到请求对应的处理器时使用的log分类
      * Log category to use when no mapped handler is found for a request.
      */
 	public static final String PAGE_NOT_FOUND_LOG_CATEGORY = "org.springframework.web.servlet.PageNotFound";
@@ -324,7 +326,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	private static final String DEFAULT_STRATEGIES_PREFIX = "org.springframework.web.servlet";
 
 	/**
-     * 当未发现请求映射的处理器时使用的附加logger
+     * 当未发现请求对应的处理器时使用的logger
      * Additional logger to use when no mapped handler is found for a request.
      */
 	protected static final Log pageNotFoundLogger = LogFactory.getLog(PAGE_NOT_FOUND_LOG_CATEGORY);
@@ -538,8 +540,8 @@ public class DispatcherServlet extends FrameworkServlet {
 
 	/**
      * 设置在请求没有处理器处理时是否抛出NoHandlerFoundException异常。
-     * 这个异常稍后可以使用HandlerExceptionResolver或者@ExceptionHandler标注的控制器方法进行捕捉。
-     * 注意，如果使用了DefaultServletHttpRequestHandler，请求将一致被转发给默认servlet，这样的话，将不会抛出NoHandlerFoundException异常。
+     * 这个异常稍后可以会被HandlerExceptionResolver或者@ExceptionHandler标注的控制器方法捕捉到。
+     * 注意，如果使用了DefaultServletHttpRequestHandler，请求只会被转发给默认servlet，这样的话，是不会抛出NoHandlerFoundException异常的。
      * 默认为假，也就是说，分发器不会抛出异常，而是通过servlet响应发送一个NOT_FOUND错误。
 	 * Set whether to throw a NoHandlerFoundException when no Handler was found for this request.
 	 * This exception can then be caught with a HandlerExceptionResolver or an
@@ -556,7 +558,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-	 * 设置是否在包含请求后执行请求属性清理，也就是说是否在分发器处理完一个内含请求时重置所有请求属性回到初始状态。
+	 * 设置是否在包含请求后清理请求属性，也就是说是否在分发器处理完一个内含请求后重置所有请求属性回到初始状态。
      * 否则，只有分发器自己的请求属性会被重置，而JSP的模型属性或者视图（例如JSTL）设置的特殊属性则不变。
      * 默认为真，强烈推荐。视图不应该依赖于（动态）内含请求设置的请求属性。
      * 这样做的好处是，在内部controller使用任何模型属性渲染JSP视图时，即使和主JSP同名，也不会带来什么副作用。
