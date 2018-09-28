@@ -159,10 +159,10 @@ import org.springframework.web.util.WebUtils;
  * {@link org.springframework.web.servlet.theme.FixedThemeResolver}.
  * </ul>
  *
- * 注意：在分发器中只有出现类型级或方法级的相应HandlerMapping，否则@RequestMapping不会得到相应的处理。
- * 默认如此。
- * 然而，假如你仍然想使用@RequestMapping，在你自定义HandlerMappings或HandlerAdapters的同时，
- * 你也需要确保实现相应的RequestMappingHandlerMapping或RequestMappingHandlerAdapter。
+ * 注意：在分发器中只有所对应的HandlerMapping应用在类型或方法上，程序才会处理@RequestMapping。
+ * 虽然默认设计如此。
+ * 但是，假如你仍然想使用@RequestMapping，你可以选择自定义HandlerMappings或HandlerAdapters，
+ * 当然你也要确保实现相应的RequestMappingHandlerMapping或RequestMappingHandlerAdapter。
  * <p><b>NOTE: The {@code @RequestMapping} annotation will only be processed if a
  * corresponding {@code HandlerMapping} (for type-level annotations) and/or
  * {@code HandlerAdapter} (for method-level annotations) is present in the dispatcher.</b>
