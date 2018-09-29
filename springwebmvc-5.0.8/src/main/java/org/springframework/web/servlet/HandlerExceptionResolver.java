@@ -22,10 +22,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.lang.Nullable;
 
 /**
+ * 实现接口完成对处理器映射或执行期抛出的异常进行解析，通常是解析成错误视图。
+ * 实现类通常会作为bean注册到应用上下文当中。
  * Interface to be implemented by objects that can resolve exceptions thrown during
  * handler mapping or execution, in the typical case to error views. Implementors are
  * typically registered as beans in the application context.
  *
+ * 错误视图类似于JSP错误页面，但是可以与任何类型的异常一起使用，包括特定处理器对应映射的任何的受检异常。
  * <p>Error views are analogous to JSP error pages but can be used with any kind of
  * exception including any checked exception, with potentially fine-grained mappings for
  * specific handlers.
@@ -36,6 +39,9 @@ import org.springframework.lang.Nullable;
 public interface HandlerExceptionResolver {
 
 	/**
+	 * 尝试解析处理器执行期抛出的异常，如果可以返回代表特定错误页面的ModelAndView。
+	 * ModelAndView可能是空的，说明异常已经解析成功，只是不需要渲染视图了。
+	 * 每个实例设置状态码就可以了。
 	 * Try to resolve the given exception that got thrown during handler execution,
 	 * returning a {@link ModelAndView} that represents a specific error page if appropriate.
 	 * <p>The returned {@code ModelAndView} may be {@linkplain ModelAndView#isEmpty() empty}
