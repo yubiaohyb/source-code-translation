@@ -24,11 +24,16 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.CollectionUtils;
 
 /**
+ * web MVC中数据和视图的容器。
  * Holder for both Model and View in the web MVC framework.
+ * 注意：两者很明显是有区别的，放在一起是为了让controller只需要返回一个值。
  * Note that these are entirely distinct. This class merely holds
  * both to make it possible for a controller to return both model
  * and view in a single return value.
  *
+ * 代表由处理器返回的数据和视图，将会由分发器进行解析。
+ * 视图可能是字符串形式的视图名，需要通过ViewResolver进行解析，或者是一个直接指定的视图对象。
+ * 数据是map类型，可以按名存储多个对象值。
  * <p>Represents a model and view returned by a handler, to be resolved
  * by a DispatcherServlet. The view can take the form of a String
  * view name which will need to be resolved by a ViewResolver object;
@@ -314,7 +319,10 @@ public class ModelAndView {
 
 
 	/**
-	 * Clear the state of this ModelAndView object.
+	 * 	清空ModelAndView对象状态
+	 * 	对象会变空。
+	 * 	可以在postHandle方法中调用，阻止视图渲染。
+	 * 	Clear the state of this ModelAndView object.
 	 * The object will be empty afterwards.
 	 * <p>Can be used to suppress rendering of a given ModelAndView object
 	 * in the {@code postHandle} method of a HandlerInterceptor.
