@@ -474,6 +474,7 @@ public abstract class WebUtils {
 	}
 
 	/**
+	 * 使用servlet2.3中定义的键值移除HttpServletRequest中特定的异常信息属性
 	 * Clear the Servlet spec's error attributes as {@link javax.servlet.http.HttpServletRequest}
 	 * attributes under the keys defined in the Servlet 2.3 specification:
 	 * {@code javax.servlet.error.status_code},

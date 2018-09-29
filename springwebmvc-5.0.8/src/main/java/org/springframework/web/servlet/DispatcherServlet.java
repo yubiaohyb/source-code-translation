@@ -1183,7 +1183,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-     * 处理要么一个ModelAndView，要么将要解析为ModelAndView的异常的处理器选择/调用的结果。
+     * 处理已选处理器的调用的结果，要么是一个ModelAndView，要么是一个待解析为ModelAndView的异常。
 	 * Handle the result of handler selection and handler invocation, which is
 	 * either a ModelAndView or an Exception to be resolved to a ModelAndView.
 	 */
@@ -1435,7 +1435,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	}
 
 	/**
-     * 渲染给定的ModelAndView
+     * 根据ModelAndView渲染视图
      * 这是处理请求的最后一步，可能会按名解析视图。
 	 * Render the given ModelAndView.
 	 * <p>This is the last stage in handling a request. It may involve resolving the view by name.
@@ -1504,7 +1504,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	/**
      * 根据视图名解析（要渲染的）视图对象
      * 默认实现会查询分发器的所有视图解析器。
-     * 可以根据特定的模型属性或请求参数来自定义解析策略。
+     * 可以根据特定的模型属性或请求参数来自定义解析策略查询。
 	 * Resolve the given view name into a View object (to be rendered).
 	 * <p>The default implementations asks all ViewResolvers of this dispatcher.
 	 * Can be overridden for custom resolution strategies, potentially based on
