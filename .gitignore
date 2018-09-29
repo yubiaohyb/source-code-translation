@@ -1,2 +1,12 @@
 # Created by .ignore support plugin (hsz.mobi)
-/.idea/
+.idea
+*.iml
+out
+gen
+javaxservletapi-4.0.1/src/test/
+springbeans-5.0.8/src/test/
+springcontext-5.0.8/src/test/
+springcontextsupport-5.0.8/src/test/
+springcore-5.0.8/src/test/
+springweb-5.0.8/src/test/
+springwebmvc-5.0.8/src/test/
