@@ -29,6 +29,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * 处理器执行链，由处理器对象和若干处理器拦截器组成
  * Handler execution chain, consisting of handler object and any handler interceptors.
  * Returned by HandlerMapping's {@link HandlerMapping#getHandler} method.
  *
@@ -123,6 +124,7 @@ public class HandlerExecutionChain {
 
 
 	/**
+	 * 调用处理器前置方法
 	 * Apply preHandle methods of registered interceptors.
 	 * @return {@code true} if the execution chain should proceed with the
 	 * next interceptor or the handler itself. Else, DispatcherServlet assumes
@@ -144,6 +146,7 @@ public class HandlerExecutionChain {
 	}
 
 	/**
+	 * 调用处理器后置方法
 	 * Apply postHandle methods of registered interceptors.
 	 */
 	void applyPostHandle(HttpServletRequest request, HttpServletResponse response, @Nullable ModelAndView mv)
