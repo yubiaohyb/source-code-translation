@@ -12,7 +12,19 @@
   <groupId>org.springframework</groupId>
   <artifactId>spring-webmvc</artifactId>
   <version>5.0.8.RELEASE</version>
-  <name>Spring Web MVC</name>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <name>Spring Web MVC</name>
   <description>Spring Web MVC</description>
   <url>https://github.com/spring-projects/spring-framework</url>
   <organization>
