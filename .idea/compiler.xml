@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="javaxservletapi-4.0.1" />
+        <module name="spring-web" />
         <module name="springbeans-5.0.8" />
         <module name="springcontext-5.0.8" />
         <module name="springcontextsupport-5.0.8" />
@@ -16,12 +17,18 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="javaxservletapi-4.0.1" target="1.8" />
-      <module name="source-code-translation" target="1.7" />
-      <module name="springbeans-5.0.8" target="1.7" />
-      <module name="springcontext-5.0.8" target="1.7" />
-      <module name="springcontextsupport-5.0.8" target="1.7" />
-      <module name="springcore-5.0.8" target="1.7" />
-      <module name="springwebmvc-5.0.8" target="1.7" />
+      <module name="source-code-translation" target="1.8" />
+      <module name="spring-web" target="1.8" />
+      <module name="springbeans-5.0.8" target="1.8" />
+      <module name="springcontext-5.0.8" target="1.8" />
+      <module name="springcontextsupport-5.0.8" target="1.8" />
+      <module name="springcore-5.0.8" target="1.8" />
+      <module name="springwebmvc-5.0.8" target="8" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="javaxservletapi-4.0.1" options="-Xlint:all" />
+    </option>
   </component>
 </project>
