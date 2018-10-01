@@ -75,7 +75,9 @@ public interface AsyncHandlerInterceptor extends HandlerInterceptor {
 	 * 当处理器并发执行时替代postHandle和afterCompletion方法的调用。
 	 * Called instead of {@code postHandle} and {@code afterCompletion}
 	 * when the handler is being executed concurrently.
-	 * 实现中可能会使用到请求和响应，但是应该避免对其改动，因为可能会跟处理器的并发执行冲突。本方法的通常用作清理线程本地变量。<p>Implementations may use the provided request and response but should
+	 *
+	 * 实现中可能会使用到请求和响应，但是应该避免对其改动，因为可能会跟处理器的并发执行冲突。本方法的通常用作清理线程本地变量。
+	 * <p>Implementations may use the provided request and response but should
 	 * avoid modifying them in ways that would conflict with the concurrent
 	 * execution of the handler. A typical use of this method would be to
 	 * clean up thread-local variables.

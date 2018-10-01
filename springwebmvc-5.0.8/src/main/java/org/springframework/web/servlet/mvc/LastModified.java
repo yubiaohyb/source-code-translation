@@ -19,13 +19,19 @@ package org.springframework.web.servlet.mvc;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * 支持记录请求的最后修改时间来辅助实现内容缓存。
+ * 用法和Servlet API的getLastModified方法一样。
  * Supports last-modified HTTP requests to facilitate content caching.
  * Same contract as for the Servlet API's {@code getLastModified} method.
  *
+ * 方法调用会交由HandlerAdapter#getLastModified实现。
+ * 默认，spring的默认框架中任何的Controller或HttpRequestHandler可以实现此接口开启最后修改时间检查。
  * <p>Delegated to by a {@link org.springframework.web.servlet.HandlerAdapter#getLastModified}
  * implementation. By default, any Controller or HttpRequestHandler within Spring's
  * default framework can implement this interface to enable last-modified checking.
  *
+ * 注意：不同的处理器实现方式，最后修改时间的实现风格不同。
+ * 例如，在spring2.5注解控制器方式（使用RequestMapping）通过WebRequest#checkNotModified方法提供最后修改时间支持，可以在主处理器方法中进行最后修改时间校验。
  * <p><b>Note:</b> Alternative handler implementation approaches have different
  * last-modified handling styles. For example, Spring 2.5's annotated controller
  * approach (using {@code @RequestMapping}) provides last-modified support
@@ -43,6 +49,9 @@ import javax.servlet.http.HttpServletRequest;
 public interface LastModified {
 
 	/**
+	 * HttpServlet中getLastModified方法作用一致。
+	 * 在请求处理前调用。
+	 * 返回值将作为Last-Modified头信息发送给HTTP客户端，并于客户端发回来的If-Modified-Since的头信息进行比较。
 	 * Same contract as for HttpServlet's {@code getLastModified} method.
 	 * Invoked <b>before</b> request processing.
 	 * <p>The return value will be sent to the HTTP client as Last-Modified header,

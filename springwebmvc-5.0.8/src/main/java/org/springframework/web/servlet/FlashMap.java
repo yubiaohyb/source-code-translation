@@ -25,12 +25,17 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * FlashMap提供了一种请求间共享信息的方式，一个请求保存属性信息用于另一个请求的处理。
+ * 当从一个URL重定向的另一个URL时通常都会需要这样。
+ * 例如：典型的Post/Redirect/Get模式。FlashMap会在重定向前保存属性（通常是在会话里），重定向后使用完，立即移除。
  * A FlashMap provides a way for one request to store attributes intended for
  * use in another. This is most commonly needed when redirecting from one URL
  * to another -- e.g. the Post/Redirect/Get pattern. A FlashMap is saved before
  * the redirect (typically in the session) and is made available after the
  * redirect and removed immediately.
  *
+ * FlashMap可以根据请求路径和请求参数辅助区分目标请求进行设置。如果没有这些信息，FlashMap可能不会被正确的下一请求接收。
+ * 在发生重定向时，目标URL是已知的，FlashMap会相应的得到更新。使用RedirectView时，这些工作会自动进行。
  * <p>A FlashMap can be set up with a request path and request parameters to
  * help identify the target request. Without this information, a FlashMap is
  * made available to the next request, which may or may not be the intended
@@ -38,6 +43,7 @@ import org.springframework.util.StringUtils;
  * updated with that information. This is done automatically when the
  * {@code org.springframework.web.servlet.view.RedirectView} is used.
  *
+ * 注意：注解了的控制器通常不会直接使用FlashMap。具体怎么用可以查看RedirectAttributes。
  * <p>Note: annotated controllers will usually not use FlashMap directly.
  * See {@code org.springframework.web.servlet.mvc.support.RedirectAttributes}
  * for an overview of using flash attributes in annotated controllers.
@@ -58,6 +64,8 @@ public final class FlashMap extends HashMap<String, Object> implements Comparabl
 
 
 	/**
+	 * 使用URL路径辅助区分当前FlashMap的目标请求。
+	 * 路径可能是绝对的，也可能是相对的。
 	 * Provide a URL path to help identify the target request for this FlashMap.
 	 * <p>The path may be absolute (e.g. "/application/resource") or relative to the
 	 * current request (e.g. "../resource").
@@ -75,6 +83,7 @@ public final class FlashMap extends HashMap<String, Object> implements Comparabl
 	}
 
 	/**
+	 * 使用请求参数辅助区分当前FlashMap的目标请求。
 	 * Provide request parameters identifying the request for this FlashMap.
 	 * @param params a Map with the names and values of expected parameters
 	 */
@@ -117,6 +126,7 @@ public final class FlashMap extends HashMap<String, Object> implements Comparabl
 	}
 
 	/**
+	 * 设置超时时间。用于序列化，也可以替代调用startExpirationPeriod(int)。
 	 * Set the expiration time for the FlashMap. This is provided for serialization
 	 * purposes but can also be used instead {@link #startExpirationPeriod(int)}.
 	 * @since 4.2
@@ -144,6 +154,7 @@ public final class FlashMap extends HashMap<String, Object> implements Comparabl
 
 
 	/**
+	 * 比较两个FlashMap，如果只有一个有目标路径，则有目标路径的最大，否则就比较两者的请求参数来决定。
 	 * Compare two FlashMaps and prefer the one that specifies a target URL
 	 * path or has more target URL parameters. Before comparing FlashMap
 	 * instances ensure that they match a given request.
