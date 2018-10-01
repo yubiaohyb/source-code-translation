@@ -29,15 +29,19 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
 /**
+ * spring控制器实现类，转发请求到一个命令的servlet，例如web.xml中"servlet-name"，而不是URL路径映射。
+ * 目标servlet在web.xml中甚至压根不需要servlet-mapping映射：一个servlet的声明就够了。
  * Spring Controller implementation that forwards to a named servlet,
  * i.e. the "servlet-name" in web.xml rather than a URL path mapping.
  * A target servlet doesn't even need a "servlet-mapping" in web.xml
  * in the first place: A "servlet" declaration is sufficient.
  *
+ * 通过spring的分发组件调用已存在servlet，例如将spring的处理器拦截器应用于请求。当前类甚至可以在不支持servlet过滤器的微小servlet容器中工作。
  * <p>Useful to invoke an existing servlet via Spring's dispatching infrastructure,
  * for example to apply Spring HandlerInterceptors to its requests. This will work
  * even in a minimal Servlet container that does not support Servlet filters.
  *
+ * 例如在web.xml中映射所有的/myservlet请求到Spring分发器，在定义一个自定义的myServlet，但是不提供servlet映射。
  * <p><b>Example:</b> web.xml, mapping all "/myservlet" requests to a Spring dispatcher.
  * Also defines a custom "myServlet", but <i>without</i> servlet mapping.
  *
