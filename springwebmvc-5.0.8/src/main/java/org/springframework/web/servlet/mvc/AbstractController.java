@@ -27,9 +27,16 @@ import org.springframework.web.servlet.support.WebContentGenerator;
 import org.springframework.web.util.WebUtils;
 
 /**
+ * controller接口实现超类，使用了模板方法设计模式。
  * Convenient superclass for controller implementations, using the Template Method
  * design pattern.
  *
+ * 工作流程与接口定义：
+ * 分发器调用handleRequest(HttpServletRequest, HttpServletResponse)；
+ * 检查支持的请求方式类型（如果不支持则抛出ServletException）；
+ * 如果要求会话信息，则尝试获取（如果没有找到则抛出ServletException）；
+ * 如果需要，根据cacheSeconds设置缓存头信息；
+ * 调用抽象方法handleRequestInternal(HttpServletRequest, HttpServletResponse)，具体实现交由子类，返回ModelAndView对象（可以选择是否需要会话同步）。
  * <p><b><a name="workflow">Workflow
  * (<a href="Controller.html#workflow">and that defined by interface</a>):</b><br>
  * <ol>
@@ -46,6 +53,7 @@ import org.springframework.web.util.WebUtils;
  * functionality to return {@link org.springframework.web.servlet.ModelAndView ModelAndView} objects.</li>
  * </ol>
  *
+ * 属性包括supportedMethods/requireSession/cacheSeconds/synchronizeOnSession。
  * <p><b><a name="config">Exposed configuration properties</a>
  * (<a href="Controller.html#config">and those defined by interface</a>):</b><br>
  * <table border="1">
@@ -119,6 +127,13 @@ public abstract class AbstractController extends WebContentGenerator implements 
 
 
 	/**
+	 * 设置控制器执行是否需要在会话层做同步处理，使来自相同客户端的并行调用序列化。
+	 * 更具体地说，如果当前标签设置为真，则handleRequestInternal方法的执行将会同步化。
+	 * 同步将采用最优的互斥量；理想情况下，是由HttpSessionMutexListener提供。
+	 * 会话互斥量在会话的生命周期中始终会是同一个对象，可以通过定义的SESSION_MUTEX_ATTRIBUTE常量进行获取。
+	 * 可以安全锁定当前会话进行同步。
+	 * 通常，会话引用本身也是一个非常安全的互斥量。
+	 * 然而，在跨servlet容器时是无法保证的；唯一100%安全的方式就是会话互斥量。
 	 * Set if controller execution should be synchronized on the session,
 	 * to serialize parallel invocations from the same client.
 	 * <p>More specifically, the execution of the {@code handleRequestInternal}
@@ -163,6 +178,7 @@ public abstract class AbstractController extends WebContentGenerator implements 
 		checkRequest(request);
 		prepareResponse(response);
 
+		//如果要求，则在同步块中执行handleRequestInternal方法。
 		// Execute handleRequestInternal in synchronized block if required.
 		if (this.synchronizeOnSession) {
 			HttpSession session = request.getSession(false);
@@ -178,7 +194,9 @@ public abstract class AbstractController extends WebContentGenerator implements 
 	}
 
 	/**
-	 * Template method. Subclasses must implement this.
+	 * 模版方法。子类必须实现。
+	 * 用途和handleRequest一样。
+	 * handleRequestTemplate method. Subclasses must implement this.
 	 * The contract is the same as for {@code handleRequest}.
 	 * @see #handleRequest
 	 */

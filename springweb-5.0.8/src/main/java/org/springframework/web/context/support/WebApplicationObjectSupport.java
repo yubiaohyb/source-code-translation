@@ -28,10 +28,13 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.WebUtils;
 
 /**
+ * 运行在web应用上下文中的应用程序对象的实用超类。
+ * 提供了getWebApplicationContext/getServletContext/getTempDir的访问入口。
  * Convenient superclass for application objects running in a {@link WebApplicationContext}.
  * Provides {@code getWebApplicationContext()}, {@code getServletContext()}, and
  * {@code getTempDir()} accessors.
  *
+ * 注意：通常推荐当只需要单个运行上下文的时候，只去用相应的单个回调接口。这个宽泛的基类主要是用于本框架内通常对多个上下文都需要访问的情况。
  * <p>Note: It is generally recommended to use individual callback interfaces for the actual
  * callbacks needed. This broad base class is primarily intended for use within the framework,
  * in case of {@link ServletContext} access etc typically being needed.
@@ -55,6 +58,8 @@ public abstract class WebApplicationObjectSupport extends ApplicationObjectSuppo
 	}
 
 	/**
+	 * 覆写基类行为强制运行在应用上下文当中。
+	 * 否则，所有的方法都会抛出非法状态异常。
 	 * Overrides the base class behavior to enforce running in an ApplicationContext.
 	 * All accessors will throw IllegalStateException if not running in a context.
 	 * @see #getApplicationContext()
@@ -69,6 +74,7 @@ public abstract class WebApplicationObjectSupport extends ApplicationObjectSuppo
 	}
 
 	/**
+	 * 如果应用上下文是WebApplicationContext，则调用initServletContext。
 	 * Calls {@link #initServletContext(javax.servlet.ServletContext)} if the
 	 * given ApplicationContext is a {@link WebApplicationContext}.
 	 */
@@ -84,6 +90,8 @@ public abstract class WebApplicationObjectSupport extends ApplicationObjectSuppo
 	}
 
 	/**
+	 * 子类可以基于当前应用对象运行的servletContext，覆写当前方法，自定义初始化过程。
+	 * 默认实现为空。
 	 * Subclasses may override this for custom initialization based
 	 * on the ServletContext that this application object runs in.
 	 * <p>The default implementation is empty. Called by

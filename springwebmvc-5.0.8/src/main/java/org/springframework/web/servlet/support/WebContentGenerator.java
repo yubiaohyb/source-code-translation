@@ -38,22 +38,27 @@ import org.springframework.web.HttpSessionRequiredException;
 import org.springframework.web.context.support.WebApplicationObjectSupport;
 
 /**
+ * web内容生成器的实用超类，如AbstractController/WebContentInterceptor。
+ * 也可以用来自定义处理器，当然也得有对应的处理器适配器。
  * Convenient superclass for any kind of web content generator,
  * like {@link org.springframework.web.servlet.mvc.AbstractController}
  * and {@link org.springframework.web.servlet.mvc.WebContentInterceptor}.
  * Can also be used for custom handlers that have their own
  * {@link org.springframework.web.servlet.HandlerAdapter}.
  *
+ * 支持HTTP缓存控制选项。可以通过cacheSeconds和cacheControl控制使用正确的HTTP头信息。
  * <p>Supports HTTP cache control options. The usage of corresponding HTTP
  * headers can be controlled via the {@link #setCacheSeconds "cacheSeconds"}
  * and {@link #setCacheControl "cacheControl"} properties.
  *
+ * 注意：从spring4.2开始，只使用setCacheSeconds，生成器的默认行为发生了变化，发送的HTTP响应头信息将和当前的浏览器/代理实现相关，头信息不再是原来的HTTP1.0了。
+ * 恢复以前的行为可以通过使用新标记过时的setUseExpiresHeader/setUseCacheControlHeader/setUseCacheControlNoStore/setUseCacheControlNoStore简单实现。
  * <p><b>NOTE:</b> As of Spring 4.2, this generator's default behavior changed when
  * using only {@link #setCacheSeconds}, sending HTTP response headers that are in line
  * with current browsers and proxies implementations (i.e. no HTTP 1.0 headers anymore)
  * Reverting to the previous behavior can be easily done by using one of the newly
  * deprecated methods {@link #setUseExpiresHeader}, {@link #setUseCacheControlHeader},
- * {@link #setUseCacheControlNoStore} or {@link #setAlwaysMustRevalidate}.
+ * {@link #setUseCacheControlNoStore} or {@link #setUseCacheControlNoStore}.
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -114,6 +119,7 @@ public abstract class WebContentGenerator extends WebApplicationObjectSupport {
 
 
 	/**
+	 * 创建一个WebContentGenerator，默认支持GET/POST/HEAD请求。
 	 * Create a new WebContentGenerator which supports
 	 * HTTP methods GET, HEAD and POST by default.
 	 */
@@ -368,6 +374,7 @@ public abstract class WebContentGenerator extends WebApplicationObjectSupport {
 
 
 	/**
+	 * 检查请求方式是否支持，会话在必需时是否存在
 	 * Check the given request for supported methods and a required session, if any.
 	 * @param request current HTTP request
 	 * @throws ServletException if the request cannot be handled because a check failed
@@ -387,6 +394,8 @@ public abstract class WebContentGenerator extends WebApplicationObjectSupport {
 	}
 
 	/**
+	 * 根据生成器设置为响应对象做准备。
+	 * 为当前生成器应用缓存秒数。
 	 * Prepare the given response according to the settings of this generator.
 	 * Applies the number of cache seconds specified for this generator.
 	 * @param response current HTTP response
