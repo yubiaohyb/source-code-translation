@@ -20,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
+ * 定义在@RequestMapping注解中consumes和produces条件中媒介类型（例如：text/plain，!text/plain）表达式的规范。
  * A contract for media type expressions (e.g. "text/plain", "!text/plain") as
  * defined in the {@code @RequestMapping} annotation for "consumes" and
  * "produces" conditions.

@@ -24,6 +24,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
+ * RequestMapping#consumes()和RequestMapping#produces()支持的媒介类型表达式。
  * Supports media type expressions as described in:
  * {@link RequestMapping#consumes()} and {@link RequestMapping#produces()}.
  *
