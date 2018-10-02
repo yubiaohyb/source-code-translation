@@ -25,12 +25,15 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerMapping;
 
 /**
+ * 简单的控制器实现，负责转换URL虚拟路径为一个视图名称，并返回视图。
  * Simple {@code Controller} implementation that transforms the virtual
  * path of a URL into a view name and returns that view.
  *
+ * 可以在从URL文件名组织视图名时选择性地添加前缀/后缀。
  * <p>Can optionally prepend a {@link #setPrefix prefix} and/or append a
  * {@link #setSuffix suffix} to build the viewname from the URL filename.
  *
+ * 可以查看下面的一些例子：
  * <p>Find some examples below:
  * <ol>
  * <li>{@code "/index" -> "index"}</li>
@@ -39,6 +42,7 @@ import org.springframework.web.servlet.HandlerMapping;
  * <li>{@code "/products/view.html" -> "products/view"}</li>
  * </ol>
  *
+ * 前缀/后缀是David Barri这个逼提的建议。
  * <p>Thanks to David Barri for suggesting prefix/suffix support!
  *
  * @author Alef Arendsen

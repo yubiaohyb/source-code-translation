@@ -33,18 +33,26 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
+ * Spring控制器实现类，内部封装了一个自治的servlet实例。这个封装的servlet实例外部不可知。
+ * 相较于ServletForwardingController，它所有的生命周期都是在这里。
  * Spring Controller implementation that wraps a servlet instance which it manages
  * internally. Such a wrapped servlet is not known outside of this controller;
  * its entire lifecycle is covered here (in contrast to {@link ServletForwardingController}).
  *
+ * 用于通过spring的分发机制调用一个已存在的servlet，例如将spring的控制器拦截器应用到它的请求上。
  * <p>Useful to invoke an existing servlet via Spring's dispatching infrastructure,
  * for example to apply Spring HandlerInterceptors to its requests.
  *
+ * 注意：Struts在解析web.xml查找servlet映射时有些特殊的要求：
+ * 需要为当前controller的servletName属性赋值方便Struts查找分发器映射（像ActionServlet一样）。
  * <p>Note that Struts has a special requirement in that it parses {@code web.xml}
  * to find its servlet mapping. Therefore, you need to specify the DispatcherServlet's
  * servlet name as "servletName" on this controller, so that Struts finds the
  * DispatcherServlet's mapping (thinking that it refers to the ActionServlet).
  *
+ * 例如：在一个分发器的xml上下文中，转发"*.do"请求到一个由ServletWrappingController封装的ActionServlet。
+ * 所有满足的请求都会经过预先配置好的处理器拦截器链（例如OpenSessionInViewInterceptor）。
+ * 从Struts的角度看，一切都正常工作。
  * <p><b>Example:</b> a DispatcherServlet XML context, forwarding "*.do" to the Struts
  * ActionServlet wrapped by a ServletWrappingController. All such requests will go
  * through the configured HandlerInterceptor chain (e.g. an OpenSessionInViewInterceptor).
@@ -180,6 +188,8 @@ public class ServletWrappingController extends AbstractController
 
 
 	/**
+	 * ServletConfig接口的内部实现类，用于传递给已封装的servlet。
+	 * 委托ServletWrappingController的字段和方法提供初始化参数和其他的环境信息。
 	 * Internal implementation of the ServletConfig interface, to be passed
 	 * to the wrapped servlet. Delegates to ServletWrappingController fields
 	 * and methods to provide init parameters and other environment info.

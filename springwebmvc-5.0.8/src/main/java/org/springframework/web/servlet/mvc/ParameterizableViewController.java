@@ -27,7 +27,7 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 /**
- * 普通控制，返回与设置视图，并且选择性设置响应状态码。视图和状态可以通过提供的配置属性进行配置。
+ * 普通控制，返回一个预先设置了的视图，也可以选择设置响应状态码。视图和状态可以通过提供的配置属性进行配置。
  * Trivial controller that always returns a pre-configured view and optionally
  * sets the response status code. The view and status can be configured using
  * the provided configuration properties.
@@ -92,7 +92,7 @@ public class ParameterizableViewController extends AbstractController {
 
 	/**
 	 * 配置控制器应该在响应对象上设置的HTTP状态码。
-	 * 重定向时前缀视图名已配置，就不需要设置这个属性了，因为RedirectView回去做。
+	 * 重定向时前缀视图名已配置，就不需要设置这个属性了，因为RedirectView会去做。
 	 * 然而这个属性仍然会被用来覆写RedirectView的3XX状态码。提供RedirectView实例用于全面控制重定向。
 	 * 如果状态码是204，且没有配置视图，则表示当前请求已经由当前处理器完全处理掉了。
 	 * Configure the HTTP status code that this controller should set on the

@@ -29,7 +29,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.WebUtils;
 
 /**
- * spring控制器实现类，转发请求到一个命令的servlet，例如web.xml中"servlet-name"，而不是URL路径映射。
+ * spring控制器实现类，转发请求到一个已命名的servlet，例如web.xml中"servlet-name"，而不是URL路径映射。
  * 目标servlet在web.xml中甚至压根不需要servlet-mapping映射：一个servlet的声明就够了。
  * Spring Controller implementation that forwards to a named servlet,
  * i.e. the "servlet-name" in web.xml rather than a URL path mapping.
@@ -41,11 +41,12 @@ import org.springframework.web.util.WebUtils;
  * for example to apply Spring HandlerInterceptors to its requests. This will work
  * even in a minimal Servlet container that does not support Servlet filters.
  *
- * 例如在web.xml中映射所有的/myservlet请求到Spring分发器，在定义一个自定义的myServlet，但是不提供servlet映射。
- *
- *
- *
- *
+ * 例如在web.xml中映射所有的/myservlet请求到Spring分发器；再自定义一个myServlet，但是不提供servlet映射。
+ * XXX
+ * 在本例中：根据myDispatcher-servlet.xml配置，在/myservlet的请求会依次转发到你的servlet（按servlet名称进行区分）。
+ * 所有满足条件的请求都会经过预先配置的处理器拦截器链（例如：一个OpenSessionInViewInterceptor）。
+ * 从servlet的角度来看，一切都正常工作。
+ * XXX
  *
  * <p><b>Example:</b> web.xml, mapping all "/myservlet" requests to a Spring dispatcher.
  * Also defines a custom "myServlet", but <i>without</i> servlet mapping.
@@ -110,6 +111,9 @@ public class ServletForwardingController extends AbstractController implements B
 
 
 	/**
+	 * 设置要转发的目标servlet的名称
+	 * 例如：在web.xml中的目标servlet的名称。
+	 * 默认是控制器的bean名称。
 	 * Set the name of the servlet to forward to,
 	 * i.e. the "servlet-name" of the target servlet in web.xml.
 	 * <p>Default is the bean name of this controller.
@@ -158,6 +162,9 @@ public class ServletForwardingController extends AbstractController implements B
 	}
 
 	/**
+	 * 判定是否使用请求分发器的include或者forward方法。
+	 * 执行检查请求中是否发现include URI属性，代表是一个include请求，是否已经提交响应对象。
+	 * 这两种情况，都会执行include操作，因为已经不可能是转发了。
 	 * Determine whether to use RequestDispatcher's {@code include} or
 	 * {@code forward} method.
 	 * <p>Performs a check whether an include URI attribute is found in the request,
