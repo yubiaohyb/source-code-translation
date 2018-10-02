@@ -29,8 +29,11 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
+ * HandlerExceptionResolver的抽象基类实现
  * Abstract base class for {@link HandlerExceptionResolver} implementations.
  *
+ * 支持通过setMappedHandlers或setMappedHandlerClasses指定作用的处理器对象或类。
+ * 实现了Ordered接口。
  * <p>Supports mapped {@linkplain #setMappedHandlers handlers} and
  * {@linkplain #setMappedHandlerClasses handler classes} that the resolver
  * should be applied to and implements the {@link Ordered} interface.
@@ -72,6 +75,10 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 	}
 
 	/**
+	 * 指定异常解析器作用的处理器集合
+	 * 异常映射和默认错误视图只会作用于指定的处理器。
+	 * 如果没有设置处理器或处理器类，则异常映射和默认错误视图会作用于所有的处理器。
+	 * 这也就意味着指定的默认错误视图会作为回调作用于所有的异常；这样当前异常解析链的任何后续的处理器异常解析器都不会再执行。
 	 * Specify the set of handlers that this exception resolver should apply to.
 	 * <p>The exception mappings and the default error view will only apply to the specified handlers.
 	 * <p>If no handlers or handler classes are set, the exception mappings and the default error
@@ -84,6 +91,7 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 	}
 
 	/**
+	 * 类似上面，只是作用对象改为了类型集合。
 	 * Specify the set of classes that this exception resolver should apply to.
 	 * <p>The exception mappings and the default error view will only apply to handlers of the
 	 * specified types; the specified types may be interfaces or superclasses of handlers as well.
@@ -97,6 +105,9 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 	}
 
 	/**
+	 * 为提示log设置log分类。名称会通过通用日志传给内部封装log实现，根据日志配置设置为相应日志类型。
+	 * 默认没有提示日志。指定当前设置激活提示日期到指定分类。
+	 * 相反地，覆写logException自定义日志。
 	 * Set the log category for warn logging. The name will be passed to the underlying logger
 	 * implementation through Commons Logging, getting interpreted as a log category according
 	 * to the logger's configuration.
@@ -110,6 +121,8 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 	}
 
 	/**
+	 * 指定是否阻止异常解析器解析的任何视图进行HTTP响应缓存。
+	 * 默认false。切换为true，自动生成HTTP响应头，阻止响应缓存。
 	 * Specify whether to prevent HTTP response caching for any view resolved
 	 * by this exception resolver.
 	 * <p>Default is {@code false}. Switch this to {@code true} in order to
@@ -121,6 +134,7 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 
 
 	/**
+	 * 检查解析器是否应该使用，如果匹配，则调用doResolveException模版方法。
 	 * Check whether this resolver is supposed to apply (i.e. if the supplied handler
 	 * matches any of the configured {@linkplain #setMappedHandlers handlers} or
 	 * {@linkplain #setMappedHandlerClasses handler classes}), and then delegate
@@ -148,6 +162,8 @@ public abstract class AbstractHandlerExceptionResolver implements HandlerExcepti
 	}
 
 	/**
+	 * 检查解析器是否应该作用于处理器
+	 * 默认实现根据配置会检查handlers和处理器类。
 	 * Check whether this resolver is supposed to apply to the given handler.
 	 * <p>The default implementation checks against the configured
 	 * {@linkplain #setMappedHandlers handlers} and
