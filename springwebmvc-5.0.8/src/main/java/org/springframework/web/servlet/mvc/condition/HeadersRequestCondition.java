@@ -28,9 +28,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.cors.CorsUtils;
 
 /**
+ * 根据RequestMapping定义的headers()属性中定义的一组header表达式集合匹配请求，对匹配到的请求条件进行逻辑与。
  * A logical conjunction (' && ') request condition that matches a request against
  * a set of header expressions with syntax defined in {@link RequestMapping#headers()}.
  *
+ * 使用头名称Accept和Content-Type传递给构造器的表达式会被忽略。
+ * 具体查看ConsumesRequestCondition和ProducesRequestCondition。
  * <p>Expressions passed to the constructor with header names 'Accept' or
  * 'Content-Type' are ignored. See {@link ConsumesRequestCondition} and
  * {@link ProducesRequestCondition} for those.
@@ -93,6 +96,7 @@ public final class HeadersRequestCondition extends AbstractRequestCondition<Head
 	}
 
 	/**
+	 * 返回两个实例的并集。
 	 * Returns a new instance with the union of the header expressions
 	 * from "this" and the "other" instance.
 	 */
@@ -104,6 +108,7 @@ public final class HeadersRequestCondition extends AbstractRequestCondition<Head
 	}
 
 	/**
+	 * 如果请求匹配所有的表达式，则返回当前实例；否则返回null
 	 * Returns "this" instance if the request matches all expressions;
 	 * or {@code null} otherwise.
 	 */
@@ -122,6 +127,11 @@ public final class HeadersRequestCondition extends AbstractRequestCondition<Head
 	}
 
 	/**
+	 * 返回：
+	 * 如果两个条件的头部表达式数量相同则为0；
+	 * 如果当前实例较多，则为负数；
+	 * 否则为正数。
+	 * 这里假设两个实例都是通过getMatchingCondition方法取得的，每个实例都只包含匹配的头部表达式，否则就是空。
 	 * Returns:
 	 * <ul>
 	 * <li>0 if the two conditions have the same number of header expressions
@@ -139,6 +149,7 @@ public final class HeadersRequestCondition extends AbstractRequestCondition<Head
 
 
 	/**
+	 * 为请求解析匹配单个头部表达式
 	 * Parses and matches a single header expression to a request.
 	 */
 	static class HeaderExpression extends AbstractNameValueExpression<String> {

@@ -22,6 +22,7 @@ import java.util.Iterator;
 import org.springframework.lang.Nullable;
 
 /**
+ * RequestCondition接口的实现基类，提供equals(Object)/hashCode()/toString()方法实现。
  * A base class for {@link RequestCondition} types providing implementations of
  * {@link #equals(Object)}, {@link #hashCode()}, and {@link #toString()}.
  *
@@ -31,6 +32,7 @@ import org.springframework.lang.Nullable;
 public abstract class AbstractRequestCondition<T extends AbstractRequestCondition<T>> implements RequestCondition<T> {
 
 	/**
+	 * 表示条件是否为空，例如是否包含任何的细化项。
 	 * Indicates whether this condition is empty, i.e. whether or not it
 	 * contains any discrete items.
 	 * @return {@code true} if empty; {@code false} otherwise
@@ -40,6 +42,8 @@ public abstract class AbstractRequestCondition<T extends AbstractRequestConditio
 	}
 
 	/**
+	 * 返回组成请求条件的细化项。
+	 * 例如URL格式/HTTP请求方式/参数表达式等等。
 	 * Return the discrete items a request condition is composed of.
 	 * <p>For example URL patterns, HTTP request methods, param expressions, etc.
 	 * @return a collection of objects, never {@code null}
@@ -47,6 +51,8 @@ public abstract class AbstractRequestCondition<T extends AbstractRequestConditio
 	protected abstract Collection<?> getContent();
 
 	/**
+	 * 输出细项内容时使用的概念。（infix：中缀）
+	 * 例如：" || "用于URL格式，" && "用于参数表达式。
 	 * The notation to use when printing discrete items of content.
 	 * <p>For example {@code " || "} for URL patterns or {@code " && "}
 	 * for param expressions.

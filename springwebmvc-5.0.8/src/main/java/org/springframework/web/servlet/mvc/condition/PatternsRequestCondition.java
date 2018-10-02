@@ -34,6 +34,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.util.UrlPathHelper;
 
 /**
+ * 根据URL路径格式集合匹配请求，对得到的请求条件进行逻辑或运算。
  * A logical disjunction (' || ') request condition that matches a request
  * against a set of URL path patterns.
  *
@@ -56,6 +57,9 @@ public final class PatternsRequestCondition extends AbstractRequestCondition<Pat
 
 
 	/**
+	 * 使用URL格式创建实例
+	 * 每个格式不为空，不以反斜杠开头，结尾为反斜杠。
+	 * 0或多个格式；如果是0，则条件匹配所有请求
 	 * Creates a new instance with the given URL patterns.
 	 * Each pattern that is not empty and does not start with "/" is prepended with "/".
 	 * @param patterns 0 or more URL patterns; if 0 the condition will match to every request.
@@ -65,6 +69,7 @@ public final class PatternsRequestCondition extends AbstractRequestCondition<Pat
 	}
 
 	/**
+	 * 扩展构造函数，标记是否使用后缀格式和反斜杠匹配
 	 * Additional constructor with flags for using suffix pattern (.*) and
 	 * trailing slash matches.
 	 * @param patterns the URL patterns to use; if 0, the condition will match to every request.

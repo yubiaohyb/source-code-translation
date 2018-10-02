@@ -23,12 +23,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.lang.Nullable;
 
 /**
+ * RequestCondition容器，用于事先不知道请求条件类型时，例如自定义条件。
+ * 由于该类也实现了RequestCondition接口，实际上也就是对持有请求条件进行了修饰，允许与其他的请求条件组合/比较。
  * A holder for a {@link RequestCondition} useful when the type of the request
  * condition is not known ahead of time, e.g. custom condition. Since this
  * class is also an implementation of {@code RequestCondition}, effectively it
  * decorates the held request condition and allows it to be combined and compared
  * with other request conditions in a type and null safe way.
  *
+ * 当RequestConditionHolder实例组合或相互比较时，最好他们持有的条件是同一类型的。否则，将会抛出ClassCastException。
  * <p>When two {@code RequestConditionHolder} instances are combined or compared
  * with each other, it is expected the conditions they hold are of the same type.
  * If they are not, a {@link ClassCastException} is raised.
@@ -71,6 +74,7 @@ public final class RequestConditionHolder extends AbstractRequestCondition<Reque
 	}
 
 	/**
+	 * 在确认条件类型相同后，组合两个RequestConditionHolder实例的请求条件或者如果其中一个容器为空，则返回另外一个。
 	 * Combine the request conditions held by the two RequestConditionHolder
 	 * instances after making sure the conditions are of the same type.
 	 * Or if one holder is empty, the other holder is returned.
@@ -94,6 +98,7 @@ public final class RequestConditionHolder extends AbstractRequestCondition<Reque
 	}
 
 	/**
+	 * 确保持有的请求条件类型相同
 	 * Ensure the held request conditions are of the same type.
 	 */
 	private void assertEqualConditionTypes(RequestCondition<?> thisCondition, RequestCondition<?> otherCondition) {
@@ -105,6 +110,8 @@ public final class RequestConditionHolder extends AbstractRequestCondition<Reque
 	}
 
 	/**
+	 * 如果持有的请求条件为null，则返回当前容器；
+	 * 如果不为空，则返回持有的请求条件中匹配的请求条件再进行一层封装返回，否则返回null。
 	 * Get the matching condition for the held request condition wrap it in a
 	 * new RequestConditionHolder instance. Or otherwise if this is an empty
 	 * holder, return the same holder instance.

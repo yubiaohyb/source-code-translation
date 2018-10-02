@@ -27,10 +27,13 @@ import org.springframework.util.Assert;
 import org.springframework.util.ObjectUtils;
 
 /**
+ * 组合请求条件，使用逻辑与确保所有的条件都匹配请求
  * Implements the {@link RequestCondition} contract by delegating to multiple
  * {@code RequestCondition} types and using a logical conjunction (' && ') to
  * ensure all conditions match a given request.
  *
+ * 合并或比较CompositeRequestCondition实例，两边的请求条件数量要求一样，并且各自序号上请求条件的类型也要求一样。
+ * 构造参数允许传null或者不传参数。
  * <p>When {@code CompositeRequestCondition} instances are combined or compared
  * they are expected to (a) contain the same number of conditions and (b) that
  * conditions in the respective index are of the same type. It is acceptable to

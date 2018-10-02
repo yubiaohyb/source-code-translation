@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.WebUtils;
 
 /**
+ * 根据RequestMapping的params()定义的参数表达式集合匹配请求，对得到的请求条件进行逻辑与运算。
  * A logical conjunction (' && ') request condition that matches a request against
  * a set parameter expressions with syntax defined in {@link RequestMapping#params()}.
  *
@@ -64,6 +65,7 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 
 
 	/**
+	 * 返回包含的请求参数表达式
 	 * Return the contained request parameter expressions.
 	 */
 	public Set<NameValueExpression<String>> getExpressions() {
@@ -81,6 +83,7 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 	}
 
 	/**
+	 * 返回当前实例的参数表达式与另一个实例的参数表达式的并集。
 	 * Returns a new instance with the union of the param expressions
 	 * from "this" and the "other" instance.
 	 */
@@ -92,6 +95,7 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 	}
 
 	/**
+	 * 如果请求匹配所有参数表达式，返回当前实例；否则，返回null
 	 * Returns "this" instance if the request matches all param expressions;
 	 * or {@code null} otherwise.
 	 */
@@ -124,6 +128,7 @@ public final class ParamsRequestCondition extends AbstractRequestCondition<Param
 
 
 	/**
+	 * 解析匹配请求的单个参数表达式
 	 * Parses and matches a single param expression to a request.
 	 */
 	static class ParamExpression extends AbstractNameValueExpression<String> {

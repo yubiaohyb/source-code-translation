@@ -36,6 +36,7 @@ public interface NameValueExpression<T> {
 	@Nullable
 	T getValue();
 
+	//不成立
 	boolean isNegated();
 
 }
