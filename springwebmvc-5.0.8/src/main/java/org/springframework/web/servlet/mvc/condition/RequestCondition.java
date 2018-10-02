@@ -21,8 +21,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.lang.Nullable;
 
 /**
+ * 请求映射条件规范
  * Contract for request mapping conditions.
  *
+ * 请求条件可以通过combine(Object)方法进行组合，
+ * 通过getMatchingCondition(HttpServletRequest)匹配请求，
+ * 通过compareTo(Object, HttpServletRequest)比较决定哪一个条件更匹配给定的请求。
  * <p>Request conditions can be combined via {@link #combine(Object)}, matched to
  * a request via {@link #getMatchingCondition(HttpServletRequest)}, and compared
  * to each other via {@link #compareTo(Object, HttpServletRequest)} to determine
@@ -37,6 +41,7 @@ import org.springframework.lang.Nullable;
 public interface RequestCondition<T> {
 
 	/**
+	 * 将当前条件与另一个条件进行组合。例如来自类上或方法上的@RequestMapping注解。
 	 * Combine this condition with another such as conditions from a
 	 * type-level and method-level {@code @RequestMapping} annotation.
 	 * @param other the condition to combine with.
@@ -46,6 +51,8 @@ public interface RequestCondition<T> {
 	T combine(T other);
 
 	/**
+	 * 检查当前条件是否匹配请求，可能返回一个由请求新建的实例。
+	 * 例如：一个条件由多个URL格式可能会返回一个新的，只有那些匹配请求格式的实例。
 	 * Check if the condition matches the request returning a potentially new
 	 * instance created for the current request. For example a condition with
 	 * multiple URL patterns may return a new instance only with those patterns

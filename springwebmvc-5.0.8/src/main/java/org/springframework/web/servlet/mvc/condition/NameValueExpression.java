@@ -20,6 +20,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
+ * @RequestMapping中用于指定请求参数与请求头条件，表达式风格类似于name!=value。
  * A contract for {@code "name!=value"} style expression used to specify request
  * parameters and request header conditions in {@code @RequestMapping}.
  *
