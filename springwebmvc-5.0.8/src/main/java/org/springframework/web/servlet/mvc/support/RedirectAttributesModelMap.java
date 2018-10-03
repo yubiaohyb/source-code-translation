@@ -24,6 +24,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.DataBinder;
 
 /**
+ * 实现了RedirectAttributes接口的ModelMap，使用DataBinder将值格式化为字符串。
+ * 也可以存储flash属性，在发生跳转时不需要将属性嵌入到重定向的URL当中。
  * A {@link ModelMap} implementation of {@link RedirectAttributes} that formats
  * values as Strings using a {@link DataBinder}. Also provides a place to store
  * flash attributes so they can survive a redirect without the need to be
@@ -42,6 +44,7 @@ public class RedirectAttributesModelMap extends ModelMap implements RedirectAttr
 
 
 	/**
+	 * 默认不绑定DataBinder；属性通过toString()转换为字符串。
 	 * Default constructor without a DataBinder.
 	 * Attribute values are converted to String via {@link #toString()}.
 	 */
@@ -50,6 +53,7 @@ public class RedirectAttributesModelMap extends ModelMap implements RedirectAttr
 	}
 
 	/**
+	 * 使用DataBinder转换为字符串。
 	 * Constructor with a DataBinder.
 	 * @param dataBinder used to format attribute values as Strings
 	 */

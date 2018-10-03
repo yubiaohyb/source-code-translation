@@ -33,6 +33,9 @@ import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.servlet.mvc.condition.HeadersRequestCondition.HeaderExpression;
 
 /**
+ * 根据媒介类型表达式匹配请求的Content-Type头信息，对得到的结果进行逻辑或运算。
+ * RequestMapping#consumes()和RequestMapping#headers()中使用的Content-Type头信息允许不同。
+ * 无论语义如何，语法是一致的。
  * A logical disjunction (' || ') request condition to match a request's
  * 'Content-Type' header to a list of media type expressions. Two kinds of
  * media type expressions are supported, which are described in
@@ -52,6 +55,7 @@ public final class ConsumesRequestCondition extends AbstractRequestCondition<Con
 
 
 	/**
+	 * 根据0或多个consumes表达式创建实例
 	 * Creates a new instance from 0 or more "consumes" expressions.
 	 * @param consumes expressions with the syntax described in
 	 * {@link RequestMapping#consumes()}; if 0 expressions are provided,
@@ -62,6 +66,9 @@ public final class ConsumesRequestCondition extends AbstractRequestCondition<Con
 	}
 
 	/**
+	 * 根据consumes和header表达式创建实例
+	 * 头表达式名称不为Content-Type的，或者没有值的会被忽略掉。
+	 * 如果没有提供表达式，则条件匹配所有请求。
 	 * Creates a new instance with "consumes" and "header" expressions.
 	 * "Header" expressions where the header name is not 'Content-Type' or have
 	 * no header value defined are ignored. If 0 expressions are provided in
