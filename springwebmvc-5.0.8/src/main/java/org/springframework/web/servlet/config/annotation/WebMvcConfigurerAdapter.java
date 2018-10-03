@@ -28,6 +28,8 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 /**
+ * WebMvcConfigurer的空方法实现，子类可以覆盖它们感兴趣的方法。
+ * 由于java 8接口提供了默认方法，从5.0开始WebMvcConfigurer提供了默认实现，当前抽象类被标记为过时。
  * An implementation of {@link WebMvcConfigurer} with empty methods allowing
  * subclasses to override only the methods they're interested in.
  *

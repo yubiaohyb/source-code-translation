@@ -86,9 +86,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ServletWebArgumentR
 import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 /**
+ * bean定义语法分析器，提供了基于注解驱动的MVC命名空间元素的配置。
  * A {@link BeanDefinitionParser} that provides the configuration for the
  * {@code <annotation-driven/>} MVC namespace element.
  *
+ * 类中注册了下列HandlerMapping：
+ * RequestMappingHandlerMapping（order值为0，用于映射请求到注解标注的控制器方法）；
+ * BeanNameUrlHandlerMapping（order值为2，映射URL路径到控制器的bean名称）
  * <p>This class registers the following {@link HandlerMapping}s:</p>
  * <ul>
  * <li>{@link RequestMappingHandlerMapping}
@@ -97,10 +101,15 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
  * ordered at 2 to map URL paths to controller bean names.
  * </ul>
  *
+ * 注意：其他的HandlerMappings可以使用<view-controller>或<resources>注册。
  * <p><strong>Note:</strong> Additional HandlerMappings may be registered
  * as a result of using the {@code <view-controller>} or the
  * {@code <resources>} MVC namespace elements.
  *
+ * 类中注册类下列HandlerAdapter：
+ * RequestMappingHandlerAdapter（用于使用注解标注的控制器方法处理请求）；
+ * HttpRequestHandlerAdapter（用于使用HttpRequestHandler处理请求）；
+ * SimpleControllerHandlerAdapter（用于基于接口的Controller处理器请求）
  * <p>This class registers the following {@link HandlerAdapter}s:
  * <ul>
  * <li>{@link RequestMappingHandlerAdapter}
@@ -111,6 +120,10 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
  * for processing requests with interface-based {@link Controller}s.
  * </ul>
  *
+ * 类中注册了下列HandlerExceptionResolver：
+ * ExceptionHandlerExceptionResolver（用于处理ExceptionHandler标注的方法的异常）；
+ * ResponseStatusExceptionResolver（用于处理标注了ResponseStatus的异常）；
+ * DefaultHandlerExceptionResolver（用于解析已知spring异常类型）
  * <p>This class registers the following {@link HandlerExceptionResolver}s:
  * <ul>
  * <li>{@link ExceptionHandlerExceptionResolver} for handling exceptions through
@@ -121,6 +134,8 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
  * exception types
  * </ul>
  *
+ * 类中注册了一个AntPathMatcher和UrlPathHelper供RequestMappingHandlerMapping/HandlerMapping/HandlerMapping使用。
+ * 注意这些bean可以通过使用path-matching MVC命名空间元素进行配置。
  * <p>This class registers an {@link org.springframework.util.AntPathMatcher}
  * and a {@link org.springframework.web.util.UrlPathHelper} to be used by:
  * <ul>
@@ -131,6 +146,9 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
  * Note that those beans can be configured by using the {@code path-matching}
  * MVC namespace element.
  *
+ * RequestMappingHandlerAdapter和ExceptionHandlerExceptionResolver默认都配置了下列实例：
+ * ContentNegotiationManager/DefaultFormattingConversionService/LocalValidatorFactoryBean。
+ * 如果类路径上存在JSR-303实现，则依赖于此的一些HttpMessageConverter也是存在的。
  * <p>Both the {@link RequestMappingHandlerAdapter} and the
  * {@link ExceptionHandlerExceptionResolver} are configured with instances of
  * the following by default:

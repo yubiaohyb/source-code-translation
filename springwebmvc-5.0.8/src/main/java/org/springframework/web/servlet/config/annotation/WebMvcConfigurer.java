@@ -32,9 +32,12 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 /**
+ * 定义回调接口来为spring MVC自定义基于java的配置。
+ * 为Spring MVC开启java配置模式使用@EnableWebMvc注解。
  * Defines callback methods to customize the Java-based configuration for
  * Spring MVC enabled via {@code @EnableWebMvc}.
  *
+ * @EnableWebMvc注解的配置类可以实现此接口提供回调，并且可以自定义覆盖默认配置。
  * <p>{@code @EnableWebMvc}-annotated configuration classes may implement
  * this interface to be called back and given a chance to customize the
  * default configuration.
@@ -47,6 +50,9 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 public interface WebMvcConfigurer {
 
 	/**
+	 * 用于配置HandlerMappings路径匹配选项，例如反斜杠匹配，后缀注册，路径匹配器以及路径辅助器。
+	 * 配置的路径匹配器/路径辅助器会有以下接口实例共享：
+	 * RequestMappings/ViewControllerMappings/ResourcesMappings
 	 * Helps with configuring HandlerMappings path matching options such as trailing slash match,
 	 * suffix registration, path matcher and path helper.
 	 * Configured path matcher and path helper instances are shared for:
@@ -61,18 +67,22 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
+	 * 配置内容协商选项
 	 * Configure content negotiation options.
 	 */
 	default void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
 	}
 
 	/**
+	 * 配置异步请求处理选项
 	 * Configure asynchronous request handling options.
 	 */
 	default void configureAsyncSupport(AsyncSupportConfigurer configurer) {
 	}
 
 	/**
+	 * 配置处理器将未处理的请求转发给servlet容器的默认servlet。
+	 * 常见的用法就是当DispatcherServlet的映射路径是"/"，覆写类servlet容器对静态资源的默认处理。
 	 * Configure a handler to delegate unhandled requests by forwarding to the
 	 * Servlet container's "default" servlet. A common use case for this is when
 	 * the {@link DispatcherServlet} is mapped to "/" thus overriding the
@@ -82,6 +92,7 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
+	 * 在默认注册之外，再添加一些Converter和Formatter
 	 * Add {@link Converter}s and {@link Formatter}s in addition to the ones
 	 * registered by default.
 	 */
@@ -89,6 +100,9 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
+	 * 添加Spring MVC生命周期拦截器对控制器方法调用进行前置或后置处理。拦截器可以注册作用于所有的请求，也可以限制作用于一组格式的URL。
+	 * 注意：这里注册的拦截器只作用于控制器，而不是资源处理器请求。
+	 * 如果需要拦截静态资源请求，可以声明一个MappedInterceptor的bean或者通过继承WebMvcConfigurationSupport切换到高级配置模式，然后覆盖resourceHandlerMapping。
 	 * Add Spring MVC lifecycle interceptors for pre- and post-processing of
 	 * controller method invocations. Interceptors can be registered to apply
 	 * to all requests or be limited to a subset of URL patterns.
@@ -104,6 +118,7 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
+	 * 添加静态资源处理器，作用于来自web应用程序根路径/类路径/或其他的特定位置的图片/js/css文件。
 	 * Add handlers to serve static resources such as images, js, and, css
 	 * files from specific locations under web application root, the classpath,
 	 * and others.
@@ -112,6 +127,7 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
+	 * 配置跨域请求的处理
 	 * Configure cross origin requests processing.
 	 * @since 4.2
 	 */
@@ -119,6 +135,8 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
+	 * 配置简单自动化的控制器，预配置类响应状态码或用于渲染响应体的视图。
+	 * 当不需要自定义控制器逻辑时非常有用——例如，渲染主页/执行简单的站点URL重定向/使用HTML返回404状态/没有任何内容的204等等。
 	 * Configure simple automated controllers pre-configured with the response
 	 * status code and/or a view to render the response body. This is useful in
 	 * cases where there is no need for custom controller logic -- e.g. render a
@@ -129,7 +147,7 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
-	 * Configure view resolvers to translate String-based view names returned from
+	 * 配置视图解析器，用于将控制器返回的字符串视图名转换成复杂视图Configure view resolvers to translate String-based view names returned from
 	 * controllers into concrete {@link org.springframework.web.servlet.View}
 	 * implementations to perform rendering with.
 	 * @since 4.1
@@ -138,6 +156,8 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
+	 * 添加解析器支持自定义控制器方法参数类型。
+	 * 修改内置支持，可以直接配置RequestMappingHandlerAdapter
 	 * Add resolvers to support custom controller method argument types.
 	 * <p>This does not override the built-in support for resolving handler
 	 * method arguments. To customize the built-in support for argument
@@ -148,6 +168,9 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
+	 * 添加处理器用于支持自定义的控制器方法返回值类型。
+	 * 这里的配置不会覆盖框架中内置的对处理返回值的支持。
+	 * 要自定义内置的处理返回值，可以直接配置RequestMappingHandlerAdapter。
 	 * Add handlers to support custom controller method return value types.
 	 * <p>Using this option does not override the built-in support for handling
 	 * return values. To customize the built-in support for handling return
@@ -181,6 +204,9 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
+	 * 配置异常解析器
+	 * 如果起始为空，框架则配置默认解析器结合；不为空，则使用给定的值进行配置。
+	 * 另外，可以通过extendHandlerExceptionResolvers对默认的异常解析器列表进行扩展/调整。
 	 * Configure exception resolvers.
 	 * <p>The given list starts out empty. If it is left empty, the framework
 	 * configures a default set of resolvers, see
@@ -199,6 +225,8 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
+	 * 扩充或修正默认配置的异常解析器列表。
+	 * 可以用于插入自定义的异常解析器，调整默认设置
 	 * Extending or modify the list of exception resolvers configured by default.
 	 * This can be useful for inserting a custom exception resolver without
 	 * interfering with default ones.
@@ -210,6 +238,9 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
+	 * 提供自定义Validator替换默认校验器
+	 * 假设类路径上存在JSR-303实现，则默认实现为OptionalValidatorFactoryBean。
+	 * 默认返回null
 	 * Provide a custom {@link Validator} instead of the one created by default.
 	 * The default implementation, assuming JSR-303 is on the classpath, is:
 	 * {@link org.springframework.validation.beanvalidation.OptionalValidatorFactoryBean}.
@@ -221,6 +252,7 @@ public interface WebMvcConfigurer {
 	}
 
 	/**
+	 * 提供自定义MessageCodesResolver，根据数据绑定和错误校验码生成消息码
 	 * Provide a custom {@link MessageCodesResolver} for building message codes
 	 * from data binding and validation error codes. Leave the return value as
 	 * {@code null} to keep the default.

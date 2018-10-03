@@ -1,4 +1,5 @@
 /**
+ * 为spring MVC定义xml配置命名空间
  * Defines the XML configuration namespace for Spring MVC.
  */
 @NonNullApi
