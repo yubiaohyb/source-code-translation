@@ -21,6 +21,7 @@ import java.util.Arrays;
 import org.springframework.web.cors.CorsConfiguration;
 
 /**
+ * 根据URL路径格式辅助完成CorsConfiguration的创建
  * Assists with the creation of a {@link CorsConfiguration} instance for a given
  * URL path pattern.
  *
@@ -46,6 +47,13 @@ public class CorsRegistration {
 
 
 	/**
+	 * 指定允许的请求源，例如http://domain1.com或者使用*允许所有请求源。
+	 * 匹配的请求源会出现在预留实际CORS请求的Access-Control-Allow-Origin响应头中。
+	 * 默认允许所有请求。
+	 * 注意：CORS检查使用来自Forwarded/X-Forwarded-Host/X-Forwarded-Port/X-Forwarded-Proto头信息的值。
+	 * 如果出现，则用于来反射来自客户端的地址。
+	 * 为了选择是否从配置中心抽取使用或丢弃这样的请求头信息，可以使用ForwardedHeaderFilter。
+	 * 有关这个filter的更多信息查看框架说明。
 	 * The list of allowed origins that be specific origins, e.g.
 	 * {@code "http://domain1.com"}, or {@code "*"} for all origins.
 	 * <p>A matched origin is listed in the {@code Access-Control-Allow-Origin}
@@ -66,6 +74,8 @@ public class CorsRegistration {
 
 
 	/**
+	 * 设置允许的HTTP方式，例如GET，POST等。使用*允许所有请求方式。
+	 * 默认simple方式，允许如GET，HEAD，POST
 	 * Set the HTTP methods to allow, e.g. {@code "GET"}, {@code "POST"}, etc.
 	 * The special value {@code "*"} allows all methods.
 	 * <p>By default "simple" methods, i.e. {@code GET}, {@code HEAD}, and
@@ -77,6 +87,10 @@ public class CorsRegistration {
 	}
 
 	/**
+	 * 设置预发请求中允许用于实际请求的请求头信息列表。
+	 * 使用*允许使用所有请求头信息。
+	 * CORS定义强制出现Cache-Control/Content-Language/Expires/Last-Modified/Pragma请求头信息，其他的可选。
+	 * 默认允许所有请求头信息
 	 * Set the list of headers that a preflight request can list as allowed
 	 * for use during an actual request. The special value {@code "*"} may be
 	 * used to allow all headers.
@@ -91,6 +105,9 @@ public class CorsRegistration {
 	}
 
 	/**
+	 * 设置返回的响应头信息
+	 * 注意：当前属性暂时不支持谁在*。
+	 * 默认属性不设置。
 	 * Set the list of response headers other than "simple" headers, i.e.
 	 * {@code Cache-Control}, {@code Content-Language}, {@code Content-Type},
 	 * {@code Expires}, {@code Last-Modified}, or {@code Pragma}, that an
@@ -104,6 +121,9 @@ public class CorsRegistration {
 	}
 
 	/**
+	 * 浏览器是否需要发送凭证，例如跨域请求携带cookies发送到注解的站点。
+	 * 相应的值配置在预发请求的Access-Control-Allow-Credentials请求头信息上。
+	 * 注意：当前配置在与域名建立了高度信任的同时，也增加了web应用程序受到攻击的风险。
 	 * Whether the browser should send credentials, such as cookies along with
 	 * cross domain requests, to the annotated endpoint. The configured value is
 	 * set on the {@code Access-Control-Allow-Credentials} response header of
@@ -122,6 +142,8 @@ public class CorsRegistration {
 	}
 
 	/**
+	 * 配置客户端持有预发请求响应的时间，单位秒。
+	 * 默认30分钟。
 	 * Configure how long in seconds the response from a pre-flight request
 	 * can be cached by clients.
 	 * <p>By default this is set to 1800 seconds (30 minutes).

@@ -30,6 +30,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.context.request.async.DeferredResultProcessingInterceptor;
 
 /**
+ * 异步请求处理配置选项
  * Helps with configuring options for asynchronous request processing.
  *
  * @author Rossen Stoyanchev
@@ -80,6 +81,7 @@ public class AsyncSupportConfigurer {
 	}
 
 	/**
+	 * 设置控制器返回Callable时并发请求执行伴随的生命周期拦截器回调。
 	 * Configure lifecycle interceptors with callbacks around concurrent request
 	 * execution that starts when a controller returns a
 	 * {@link java.util.concurrent.Callable}.
@@ -91,6 +93,7 @@ public class AsyncSupportConfigurer {
 	}
 
 	/**
+	 * 设置控制器返回DeferredResult时并发请求执行伴随的生命周期拦截器回调。
 	 * Configure lifecycle interceptors with callbacks around concurrent request
 	 * execution that starts when a controller returns a {@link DeferredResult}.
 	 * @param interceptors the interceptors to register
