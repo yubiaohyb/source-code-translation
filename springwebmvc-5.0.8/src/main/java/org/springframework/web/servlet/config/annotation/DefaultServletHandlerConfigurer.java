@@ -26,11 +26,14 @@ import org.springframework.web.servlet.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.servlet.resource.DefaultServletHttpRequestHandler;
 
 /**
+ * 为静态资源访问配置请求处理器，转发请求到servlet容器的默认servlet。
+ * 主要用于DispatcherServlet映射"/"，覆盖了servlet容器对静态资源的默认处理。
  * Configures a request handler for serving static resources by forwarding
  * the request to the Servlet container's "default" Servlet. This is intended
  * to be used when the Spring MVC {@link DispatcherServlet} is mapped to "/"
  * thus overriding the Servlet container's default handling of static resources.
  *
+ * 由于该处理配置的优先级最低，实际上，只有当其他的处理器没有处理请求时，才会被当前处理器转发给默认的servlet。
  * <p>Since this handler is configured at the lowest precedence, effectively
  * it allows all other handler mappings to handle the request, and if none
  * of them do, this handler can forward it to the "default" Servlet.

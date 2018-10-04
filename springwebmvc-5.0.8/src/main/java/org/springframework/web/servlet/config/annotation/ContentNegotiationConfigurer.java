@@ -34,12 +34,15 @@ import org.springframework.web.accept.ParameterContentNegotiationStrategy;
 import org.springframework.web.accept.PathExtensionContentNegotiationStrategy;
 
 /**
+ * 创建内容协商管理器，使用一个或多个ContentNegotiationStrategy实例进行配置。
  * Creates a {@code ContentNegotiationManager} and configures it with
  * one or more {@link ContentNegotiationStrategy} instances.
  *
+ * 从5.0开始，你可以通过strategies(List)明确设置使用的策略。
  * <p>As of 5.0 you can set the exact strategies to use via
  * {@link #strategies(List)}.
  *
+ * 你也可以依赖于下面描述的默认集合。
  * <p>As an alternative you can also rely on the set of defaults described below
  * which can be turned on or off or customized through the methods of this
  * builder:
@@ -77,9 +80,12 @@ import org.springframework.web.accept.PathExtensionContentNegotiationStrategy;
  * </tr>
  * </table>
  *
+ * 策略的配置顺序是固定的。你只能选择关闭或者开启。
  * <p>The order in which strategies are configured is fixed. You can only turn
  * them on or off.
  *
+ * 注意：如果你必须使用基于URL的内容类型解析，推荐使用路径扩展名，查询参数的使用也会相对简化，因为路径扩展名会给URI变量/路径参数/URI解码带来一些麻烦。
+ * 显式使用策略，可以考虑设置favorPathExtension为false或者strategies(List)指定。
  * <strong>Note:</strong> if you must use URL-based content type resolution,
  * the use of a query parameter is simpler and preferable to the use of a path
  * extension since the latter can cause issues with URI variables, path
@@ -108,6 +114,8 @@ public class ContentNegotiationConfigurer {
 
 
 	/**
+	 * 明确设置使用的策略列表
+	 * 注意：当前方法的使用和其他方法是相斥的。
 	 * Set the exact list of strategies to use.
 	 * <p><strong>Note:</strong> use of this method is mutually exclusive with
 	 * use of all other setters in this class which customize a default, fixed
@@ -120,6 +128,8 @@ public class ContentNegotiationConfigurer {
 	}
 
 	/**
+	 * 是否根据URL中文件扩展名决定请求的媒介类型。
+	 * 默认为真。如果请求/hotels.pdf将会被解析为请求application/pdf，而忽略Accept头信息。
 	 * Whether the path extension in the URL path should be used to determine
 	 * the requested media type.
 	 * <p>By default this is set to {@code true} in which case a request
@@ -132,6 +142,7 @@ public class ContentNegotiationConfigurer {
 	}
 
 	/**
+	 * 添加扩展名和媒介类型映射
 	 * Add a mapping from a key, extracted from a path extension or a query
 	 * parameter, to a MediaType. This is required in order for the parameter
 	 * strategy to work. Any extensions explicitly registered here are also
