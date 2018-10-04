@@ -1,4 +1,5 @@
 /**
+ * CORS支持，基于通用CorsProcessor策略。
  * Support for CORS (Cross-Origin Resource Sharing),
  * based on a common {@code CorsProcessor} strategy.
  */

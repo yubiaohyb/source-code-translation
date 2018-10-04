@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.lang.Nullable;
 
 /**
+ * 通常由HTTP请求处理器实现，基于传入的请求获取相应的CorsConfiguration配置。
  * Interface to be implemented by classes (usually HTTP request handlers) that
  * provides a {@link CorsConfiguration} instance based on the provided request.
  *

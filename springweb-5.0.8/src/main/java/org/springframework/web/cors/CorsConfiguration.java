@@ -31,9 +31,12 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
+ * CORS配置容器，用于方法检查实际请求源，HTTP请求方式，请求头信息。
  * A container for CORS configuration along with methods to check against the
  * actual origin, HTTP methods, and headers of a given request.
  *
+ * 默认新创建的CorsConfiguration不允许任何的跨域请求，必须显式指定。
+ * 使用applyPermitDefaultValues方法跳过手工初始化，默认支持GET, HEAD, and POST方式的所有跨域请求。
  * <p>By default a newly created {@code CorsConfiguration} does not permit any
  * cross-origin requests and must be configured explicitly to indicate what
  * should be allowed. Use {@link #applyPermitDefaultValues()} to flip the

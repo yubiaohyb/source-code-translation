@@ -39,9 +39,12 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.util.WebUtils;
 
 /**
+ * CorsProcessor接口默认实现
  * The default implementation of {@link CorsProcessor}, as defined by the
  * <a href="http://www.w3.org/TR/cors/">CORS W3C recommendation</a>.
  *
+ * 注意：当输入CorsConfiguration为空时，当前实现不会马上拒绝简单或实际请求，而是简单地避免添加CORS头信息到响应中。
+ * 如果响应已经包含CORS头信息或着请求检测到是同源的话，会跳过CORS处理。
  * <p>Note that when input {@link CorsConfiguration} is {@code null}, this
  * implementation does not reject simple or actual requests outright but simply
  * avoid adding CORS headers to the response. CORS processing is also skipped
