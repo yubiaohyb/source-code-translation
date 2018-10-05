@@ -29,10 +29,13 @@ import org.springframework.util.Assert;
 import org.springframework.web.servlet.view.AbstractUrlBasedView;
 
 /**
+ * PDF视图抽象超类，用于使用AcroForm操作文档。特定应用的视图类会继承当前类，使用model数据来合并PDF表单。
  * Abstract superclass for PDF views that operate on an existing
  * document with an AcroForm. Application-specific view classes
  * will extend this class to merge the PDF form with model data.
  *
+ * 当前视图实现使用了Bruno Lowagie的iText API。
+ * 我们强烈推荐使用OpenPDF，因为它fork了iText 2.1.7，且仍在维护，还修复了未受信PDF内容的问题。
  * <p>This view implementation uses Bruno Lowagie's
  * <a href="http://www.lowagie.com/iText">iText</a> API.
  * Known to work with the original iText 2.1.7 as well as its fork
@@ -40,6 +43,7 @@ import org.springframework.web.servlet.view.AbstractUrlBasedView;
  * <b>We strongly recommend OpenPDF since it is actively maintained
  * and fixes an important vulnerability for untrusted PDF content.</b>
  *
+ * 感谢Bryant Larsen这个逼提供的建议和原型。
  * <p>Thanks to Bryant Larsen for the suggestion and the original prototype!
  *
  * @author Juergen Hoeller
@@ -75,6 +79,8 @@ public abstract class AbstractPdfStamperView extends AbstractUrlBasedView {
 	}
 
 	/**
+	 * 使用PdfReader读取原始PDF资源。
+	 * 默认实现会将url作为应用程序上下文资源进行解析。
 	 * Read the raw PDF resource into an iText PdfReader.
 	 * <p>The default implementation resolve the specified "url" property
 	 * as ApplicationContext resource.
@@ -89,6 +95,8 @@ public abstract class AbstractPdfStamperView extends AbstractUrlBasedView {
 	}
 
 	/**
+	 * 子类必须实现此方法使用model合并PDF表单。
+	 * 这是你对AcroForm进行设置的地方。下面是可以做什么的一个例子：
 	 * Subclasses must implement this method to merge the PDF form
 	 * with the given model data.
 	 * <p>This is where you are able to set values on the AcroForm.
@@ -103,6 +111,8 @@ public abstract class AbstractPdfStamperView extends AbstractUrlBasedView {
 	 *
 	 * // set the disposition and filename
 	 * response.setHeader("Content-disposition", "attachment; FILENAME=someName.pdf");</pre>
+	 *
+	 * 注意：传入的HTTP响应对象只应该用于设置cookies或其他的HTTP头信息。已构建的PDF文档本身会在方法返回后自动写入响应中。
 	 * <p>Note that the passed-in HTTP response is just supposed to be used
 	 * for setting cookies or other HTTP headers. The built PDF document itself
 	 * will automatically get written to the response after this method returns.

@@ -25,6 +25,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 /**
+ * Office 2007 XLSX格式Excel文档视图的实用超类，使用了POI的流式变量，兼容Apache POI 3.9或更高版本。
  * Convenient superclass for Excel document views in the Office 2007 XLSX format,
  * using POI's streaming variant. Compatible with Apache POI 3.9 and higher.
  *

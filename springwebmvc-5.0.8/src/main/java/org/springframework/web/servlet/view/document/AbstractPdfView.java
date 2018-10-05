@@ -30,6 +30,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import org.springframework.web.servlet.view.AbstractView;
 
 /**
+ * PDF视图抽象类。特定应用的视图类可以实现此类。视图由子类自身持有，而非模版持有。
  * Abstract superclass for PDF views. Application-specific view classes
  * will extend this class. The view will be held in the subclass itself,
  * not in a template.
@@ -41,6 +42,7 @@ import org.springframework.web.servlet.view.AbstractView;
  * <b>We strongly recommend OpenPDF since it is actively maintained
  * and fixes an important vulnerability for untrusted PDF content.</b>
  *
+ * 注意：ie需要使用.pdf扩展名，因为有时候声明的内容类型会无效。
  * <p>Note: Internet Explorer requires a ".pdf" extension, as it doesn't
  * always respect the declared content type.
  *
@@ -89,6 +91,8 @@ public abstract class AbstractPdfView extends AbstractView {
 	}
 
 	/**
+	 * 创建PDF文档容纳PDF内容
+	 * 默认返回A4文档，但是子类恶意指定任意类型，可以在视图中声明bean属性进行参数化
 	 * Create a new document to hold the PDF contents.
 	 * <p>By default returns an A4 document, but the subclass can specify any
 	 * Document, possibly parameterized via bean properties defined on the View.
@@ -100,6 +104,7 @@ public abstract class AbstractPdfView extends AbstractView {
 	}
 
 	/**
+	 * 为iText文档创建PdfWriter
 	 * Create a new PdfWriter for the given iText Document.
 	 * @param document the iText Document to create a writer for
 	 * @param os the OutputStream to write to
@@ -111,6 +116,8 @@ public abstract class AbstractPdfView extends AbstractView {
 	}
 
 	/**
+	 * 预处理PdfWriter。在构建PDF文档前调用，也就是说，在Document.open()调用前。
+	 * 例如，可以用于注册页面事件监听器。默认实现中设置了查看器设置。
 	 * Prepare the given PdfWriter. Called before building the PDF document,
 	 * that is, before the call to {@code Document.open()}.
 	 * <p>Useful for registering a page event listener, for example.
@@ -132,7 +139,9 @@ public abstract class AbstractPdfView extends AbstractView {
 	}
 
 	/**
-	 * Return the viewer preferences for the PDF file.
+	 * 返回PDF文件的查看器设置
+	 * 默认返回AllowPrinting和PageLayoutSinglePage
+	 * 和Return the viewer preferences for the PDF file.
 	 * <p>By default returns {@code AllowPrinting} and
 	 * {@code PageLayoutSinglePage}, but can be subclassed.
 	 * The subclass can either have fixed preferences or retrieve
@@ -146,6 +155,8 @@ public abstract class AbstractPdfView extends AbstractView {
 	}
 
 	/**
+	 * 设置iText文档的元数据字段（作者，标题，等）
+	 * 默认实现为空。子类可以覆写添加实现。方法调用会在PdfWriter和Document关联后，document.open()调用前。
 	 * Populate the iText Document's meta fields (author, title, etc.).
 	 * <br>Default is an empty implementation. Subclasses may override this method
 	 * to add meta fields such as title, subject, author, creator, keywords, etc.
@@ -167,6 +178,9 @@ public abstract class AbstractPdfView extends AbstractView {
 	}
 
 	/**
+	 * 子类根据model构建iText PDF文档。
+	 * 调用位于Document.open()和Document.close()之间。
+	 * 注意：
 	 * Subclasses must implement this method to build an iText PDF document,
 	 * given the model. Called between {@code Document.open()} and
 	 * {@code Document.close()} calls.

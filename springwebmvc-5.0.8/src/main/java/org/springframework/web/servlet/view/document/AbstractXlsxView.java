@@ -23,6 +23,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 /**
+ * Office 2007 XLSX格式Excel文档视图的实用超类，兼容Apache POI 3.5或更高版本。
  * Convenient superclass for Excel document views in the Office 2007 XLSX format
  * (as supported by POI-OOXML). Compatible with Apache POI 3.5 and higher.
  *

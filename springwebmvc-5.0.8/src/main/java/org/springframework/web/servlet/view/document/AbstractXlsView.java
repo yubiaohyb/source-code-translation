@@ -28,9 +28,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.servlet.view.AbstractView;
 
 /**
+ * 传统XLS格式Excel文档视图的实用超类，兼容Apache POI 3.5或更高版本。
  * Convenient superclass for Excel document views in traditional XLS format.
  * Compatible with Apache POI 3.5 and higher.
  *
+ * 子类中workbook的具体使用，查看Apache's POI官网。
  * <p>For working with the workbook in the subclass, see
  * <a href="http://poi.apache.org">Apache's POI site</a>
  *
@@ -54,15 +56,18 @@ public abstract class AbstractXlsView extends AbstractView {
 	}
 
 	/**
+	 * 根据model渲染Excel视图
 	 * Renders the Excel view, given the specified model.
 	 */
 	@Override
 	protected final void renderMergedOutputModel(
 			Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
+		//新创建一个workbook
 		// Create a fresh workbook instance for this render step.
 		Workbook workbook = createWorkbook(model, request);
 
+		//委托给应用程序
 		// Delegate to application-provided document code.
 		buildExcelDocument(model, workbook, request, response);
 
@@ -101,6 +106,7 @@ public abstract class AbstractXlsView extends AbstractView {
 	}
 
 	/**
+	 * 应用程序子类实现此方法，根据model填充Excel workbook文档。
 	 * Application-provided subclasses must implement this method to populate
 	 * the Excel workbook document, given the model.
 	 * @param model the model Map
