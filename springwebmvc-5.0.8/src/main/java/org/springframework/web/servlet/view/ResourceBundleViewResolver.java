@@ -37,12 +37,17 @@ import org.springframework.web.context.support.GenericWebApplicationContext;
 import org.springframework.web.servlet.View;
 
 /**
+ * ViewResolver的实现类，根据指定的资源束的基本名称，使用资源束中的bean定义。
  * A {@link org.springframework.web.servlet.ViewResolver} implementation that uses
  * bean definitions in a {@link ResourceBundle}, specified by the bundle basename.
  *
+ * 资源束通常定义在位于类路径下的一个属性文件中。
+ * 默认束基本名称是views。
  * <p>The bundle is typically defined in a properties file, located in the classpath.
  * The default bundle basename is "views".
  *
+ * 视图解析器使用PropertyResourceBundle默认实现支持本地化视图定义。
+ * 例如，对本地化属性值de_AT来说，基本名称views会被解析成类路径资源views_de_AT.properties，views_de.properties，views.properties。
  * <p>This {@code ViewResolver} supports localized view definitions, using the
  * default support of {@link java.util.PropertyResourceBundle}. For example, the
  * basename "views" will be resolved as class path resources "views_de_AT.properties",
