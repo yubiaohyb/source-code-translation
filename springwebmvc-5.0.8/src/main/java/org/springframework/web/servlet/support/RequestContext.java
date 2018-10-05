@@ -54,16 +54,21 @@ import org.springframework.web.util.UrlPathHelper;
 import org.springframework.web.util.WebUtils;
 
 /**
+ * 请求专有状态上下文容器，像当前web应用上下文/当前区域，当前主题，可能的绑定异常。简化了对本地化消息和异常的获取。
  * Context holder for request-specific state, like current web application context, current locale,
  * current theme, and potential binding errors. Provides easy access to localized messages and
  * Errors instances.
  *
+ * 适用于视图的渲染/JSP的userBean标签的使用，JSP脚本，JSTL EL等等。
+ * 对于无法访问servlet请求的视图（如果FreeMarker模板）来说，非常有用。
  * <p>Suitable for exposition to views, and usage within JSP's "useBean" tag, JSP scriptlets, JSTL EL,
  * etc. Necessary for views that do not have access to the servlet request, like FreeMarker templates.
  *
+ * 可以手动实例化，也可以通过AbstractView的requestContextAttribute属性作为model属性自动提供给视图。
  * <p>Can be instantiated manually, or automatically exposed to views as model attribute via AbstractView's
  * "requestContextAttribute" property.
  *
+ * 访问web应用根上下文，根据区域（HttpServletRequest的初始区域）使用合适的回调，在DispatcherServlet的请求之外，同样可以工作。
  * <p>Will also work outside of DispatcherServlet requests, accessing the root WebApplicationContext
  * and using an appropriate fallback for the locale (the HttpServletRequest's primary locale).
  *
@@ -77,6 +82,9 @@ import org.springframework.web.util.WebUtils;
 public class RequestContext {
 
 	/**
+	 * 请求上下文在找不到主题解析器时，默认使用的主题名称。
+	 * 只适用于非DispatcherServlet请求。
+	 * 和AbstractThemeResolver默认设置一样（这里就不进行接入了，避免包的内部依赖）
 	 * Default theme name used if the RequestContext cannot find a ThemeResolver.
 	 * Only applies to non-DispatcherServlet requests.
 	 * <p>Same as AbstractThemeResolver's default, but not linked in here to avoid package interdependencies.
@@ -85,6 +93,8 @@ public class RequestContext {
 	public static final String DEFAULT_THEME_NAME = "theme";
 
 	/**
+	 * 当前持有的web应用上下文
+	 * 默认是DispatcherServlet的上下文或者根上下文
 	 * Request attribute to hold the current web application context for RequestContext usage.
 	 * By default, the DispatcherServlet's context (or the root context as fallback) is exposed.
 	 */
@@ -129,6 +139,10 @@ public class RequestContext {
 
 
 	/**
+	 * 根据请求创建一个新的请求上下文，使用请求属性检索异常信息。
+	 * 只配合InternalResourceViews使用，因为异常实例是model的一部分，通常不作为请求属性提供。
+	 * 通常配合JSP或自定义标签使用。只工作于DispatcherServlet请求。
+	 * 传入ServletContext用作web应用根上下文的回调
 	 * Create a new RequestContext for the given request, using the request attributes for Errors retrieval.
 	 * <p>This only works with InternalResourceViews, as Errors instances are part of the model and not
 	 * normally exposed as request attributes. It will typically be used within JSPs or custom tags.
@@ -158,6 +172,7 @@ public class RequestContext {
 	}
 
 	/**
+	 * 如果指定了ServletContext，请求上下文也会配合web应用根上下文工作（在DispatcherServlet之外）。
 	 * Create a new RequestContext for the given request, using the request attributes for Errors retrieval.
 	 * <p>This only works with InternalResourceViews, as Errors instances are part of the model and not
 	 * normally exposed as request attributes. It will typically be used within JSPs or custom tags.
@@ -174,6 +189,7 @@ public class RequestContext {
 	}
 
 	/**
+	 * 可以配合所有视图实现工作。通常提供给视图实现使用。
 	 * Create a new RequestContext for the given request, using the given model attributes for Errors retrieval.
 	 * <p>This works with all View implementations. It will typically be used by View implementations.
 	 * <p><b>Will only work within a DispatcherServlet request.</b>
@@ -189,6 +205,7 @@ public class RequestContext {
 	}
 
 	/**
+	 * 可以配合所有视图实现工作。通常提供给视图实现使用。
 	 * Create a new RequestContext for the given request, using the given model attributes for Errors retrieval.
 	 * <p>This works with all View implementations. It will typically be used by View implementations.
 	 * <p>If a ServletContext is specified, the RequestContext will also work with a root
@@ -209,6 +226,8 @@ public class RequestContext {
 		this.response = response;
 		this.model = model;
 
+		// 取web应用上下文，要么来自DispatcherServlet，要么来自根上下文。
+		// 需要为根上下文指定ServletContext进行回调
 		// Fetch WebApplicationContext, either from DispatcherServlet or the root context.
 		// ServletContext needs to be specified to be able to fall back to the root context!
 		WebApplicationContext wac = (WebApplicationContext) request.getAttribute(WEB_APPLICATION_CONTEXT_ATTRIBUTE);
