@@ -42,10 +42,13 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.support.RequestContext;
 
 /**
+ * View实现的抽象基类。
+ * 子类应该是JavaBeans，作为spring管理的bean实例，提供方便的配置。
  * Abstract base class for {@link org.springframework.web.servlet.View}
  * implementations. Subclasses should be JavaBeans, to allow for
  * convenient configuration as Spring-managed bean instances.
  *
+ * 提供类对静态属性的支持，可以通过多种方式进行配置。对于每个渲染操作，静态属性和动态属性都会进行合并。
  * <p>Provides support for static attributes, to be made available to the view,
  * with a variety of ways to specify them. Static attributes will be merged
  * with the given dynamic attributes (the model that the controller returned)
@@ -62,10 +65,14 @@ import org.springframework.web.servlet.support.RequestContext;
  */
 public abstract class AbstractView extends WebApplicationObjectSupport implements View, BeanNameAware {
 
-	/** Default content type. Overridable as bean property. */
+	/**
+	 * 默认内容类型
+	 * Default content type. Overridable as bean property. */
 	public static final String DEFAULT_CONTENT_TYPE = "text/html;charset=ISO-8859-1";
 
-	/** Initial size for the temporary output byte array (if any) */
+	/**
+	 * 如果有的话，临时输出字节数组的初始大小
+	 * Initial size for the temporary output byte array (if any) */
 	private static final int OUTPUT_BYTE_ARRAY_INITIAL_SIZE = 4096;
 
 
@@ -90,6 +97,9 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 
 
 	/**
+	 * 设置当前视图内容类型
+	 * 默认text/html;charset=ISO-8859-1
+	 * 如果视图本身已经设置类内容类型，可能会被子类忽略，例如JSP
 	 * Set the content type for this view.
 	 * Default is "text/html;charset=ISO-8859-1".
 	 * <p>May be ignored by subclasses if the view itself is assumed
@@ -109,6 +119,8 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 设置当前视图的RequestContext属性名称
+	 * 默认没有
 	 * Set the name of the RequestContext attribute for this view.
 	 * Default is none.
 	 */
@@ -125,6 +137,9 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 使用CSV字符串谁静态属性
+	 * 格式：attname0={value1},attname1={value1}
+	 * 静态属性是指定义在视图实例配置中的固定属性；另一方面，动态属性作为model传递过来。
 	 * Set static attributes as a CSV string.
 	 * Format is: attname0={value1},attname1={value1}
 	 * <p>"Static" attributes are fixed attributes that are specified in
@@ -157,6 +172,10 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 为视图设置来自Properties对象的静态属性。
+	 * 这是设置静态属性最方便的方式。
+	 * 注意：如果model中传过来的动态属性会覆盖同名的静态属性。
+	 * 可以使用PropertiesEditor解析字符串value或者xml中bean定义的props元素进行设置。
 	 * Set static attributes for this view from a
 	 * {@code java.util.Properties} object.
 	 * <p>"Static" attributes are fixed attributes that are specified in
@@ -174,6 +193,8 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 使用map为视图设置静态属性，可以设置任何类型的属性值，例如bean引用。
+	 * 可以使用xml中bean定义的map或props元素进行设置。
 	 * Set static attributes for this view from a Map. This allows to set
 	 * any kind of attribute values, for example bean references.
 	 * <p>"Static" attributes are fixed attributes that are specified in
@@ -200,6 +221,7 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 必须在渲染前调用
 	 * Add static data to this view, exposed in each view.
 	 * <p>"Static" attributes are fixed attributes that are specified in
 	 * the View instance configuration. "Dynamic" attributes, on the other hand,
@@ -224,6 +246,8 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 是否添加路径变量到model
+	 * 默认为真。复杂的视图类型可以覆写此方法
 	 * Specify whether to add path variables to the model or not.
 	 * <p>Path variables are commonly bound to URI template variables through the {@code @PathVariable}
 	 * annotation. They're are effectively URI template variables with type conversion applied to
@@ -264,6 +288,9 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 指定当前上下文中应该提供的bean的名称
+	 * 如果非空，相应的bean会作为属性提供给视图。
+	 * 如果你想将当前上下文的所有spring bean都暴露出来，可以使用exposeContextBeansAsAttributes方法，而不用在这里一一列举。
 	 * Specify the names of beans in the context which are supposed to be exposed.
 	 * If this is non-null, only the specified beans are eligible for exposure as
 	 * attributes.
@@ -295,6 +322,8 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 
 
 	/**
+	 * 如果需要，将视图需要的model并入静态属性和RequestContext属性。
+	 * 委托renderMergedOutputModel进行实际渲染。
 	 * Prepares the view given the specified model, merging it with static
 	 * attributes and a RequestContext attribute, if necessary.
 	 * Delegates to renderMergedOutputModel for the actual rendering.
@@ -315,6 +344,8 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 创建合并输入map（永远不为空），包含类动态值，静态属性。
+	 * 动态值优于静态属性。
 	 * Creates a combined output Map (never {@code null}) that includes dynamic values and static attributes.
 	 * Dynamic values take precedence over static attributes.
 	 */
@@ -348,6 +379,9 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 根据提供的属性名称创建RequestContext。
+	 * 默认实现根据请求和model创建一个标准的RequestContext实例。
+	 * 子类中可以覆写。
 	 * Create a RequestContext to expose under the specified attribute name.
 	 * <p>The default implementation creates a standard RequestContext instance for the
 	 * given request and model. Can be overridden in subclasses for custom instances.
@@ -365,7 +399,9 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 为渲染预处理响应对象
 	 * Prepare the given response for rendering.
+	 * 默认实现用于解决ie下通过HTTPS方式发送下载内容的bug。
 	 * <p>The default implementation applies a workaround for an IE bug
 	 * when sending download content via HTTPS.
 	 * @param request current HTTP request
@@ -379,6 +415,9 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 当前视图是否生成下载内容（通常是二进制内容像PDF或Excel文件）。
+	 * 默认实现返回false。
+	 * 如果实现类用于生成下载内容提供给客户端（通常是使用响应对象的OutputStream），则鼓励返回true。
 	 * Return whether this view generates download content
 	 * (typically binary content like PDF or Excel files).
 	 * <p>The default implementation returns {@code false}. Subclasses are
@@ -393,6 +432,8 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 获取请求用于renderMergedOutputModel调用的处理结果，例如提供给视图。
+	 * 默认实现对初始请求进行了封装，将spring的bean作为请求属性提供了出来（如果需要）。
 	 * Get the request handle to expose to {@link #renderMergedOutputModel}, i.e. to the view.
 	 * <p>The default implementation wraps the original request for exposure of Spring beans
 	 * as request attributes (if demanded).
@@ -412,6 +453,9 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 子类实现此方法进行视图的实际渲染。
+	 * 第一步就是对请求进行预处理：在使用JSP时，就需要将model对象设置为请求属性；
+	 * 第二步就是对视图的实际渲染：例如通过RequestDispatcher包含JSP。
 	 * Subclasses must implement this method to actually render the view.
 	 * <p>The first step will be preparing the request: In the JSP case,
 	 * this would mean setting model objects as request attributes.
@@ -428,6 +472,8 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 
 
 	/**
+	 * 将model中的对象设置为请求属性。
+	 * 方法适用于RequestDispatcher可得的所有资源。
 	 * Expose the model objects in the given map as request attributes.
 	 * Names will be taken from the model Map.
 	 * This method is suitable for all resources reachable by {@link javax.servlet.RequestDispatcher}.
@@ -465,6 +511,7 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 为HTTP响应写入临时输出流
 	 * Write the given temporary OutputStream to the HTTP response.
 	 * @param response current HTTP response
 	 * @param baos the temporary OutputStream to write
@@ -482,6 +529,7 @@ public abstract class AbstractView extends WebApplicationObjectSupport implement
 	}
 
 	/**
+	 * 除非请求通过View#SELECTED_CONTENT_TYPE已经设置了一个复杂的内容类型，否则响应设置当前视图中已配置的内容类型。
 	 * Set the content type of the response to the configured
 	 * {@link #setContentType(String) content type} unless the
 	 * {@link View#SELECTED_CONTENT_TYPE} request attribute is present and set
