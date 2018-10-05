@@ -34,15 +34,20 @@ import org.springframework.web.context.support.GenericWebApplicationContext;
 import org.springframework.web.servlet.View;
 
 /**
+ * ViewResolver接口的实现类，根据指定的资源位置，专门配置视图定义的xml文件读取bean定义。
+ * 文件通常位于WEB-INF目录下，默认为/WEB-INF/views.xml。
  * A {@link org.springframework.web.servlet.ViewResolver} implementation that uses
  * bean definitions in a dedicated XML file for view definitions, specified by
  * resource location. The file will typically be located in the WEB-INF directory;
  * the default is "/WEB-INF/views.xml".
  *
+ * 当前实现类不支国际化，如果有需要，可以考虑使用ResourceBundleViewResolver。
  * <p>This {@code ViewResolver} does not support internationalization at the level
  * of its definition resources. Consider {@link ResourceBundleViewResolver} if you
  * need to apply different view resources per locale.
  *
+ * 注意：该视图解析器实现了Ordered接口，用于灵活配置在视图解析器链中位置。
+ * 例如，有些特殊的视图可以通过当前视图解析器定义（order值赋值为0），而剩余的视图会由UrlBasedViewResolver负责解析。
  * <p>Note: This {@code ViewResolver} implements the {@link Ordered} interface
  * in order to allow for flexible participation in {@code ViewResolver} chaining.
  * For example, some special views could be defined via this {@code ViewResolver}
@@ -95,6 +100,8 @@ public class XmlViewResolver extends AbstractCachingViewResolver
 	}
 
 	/**
+	 * 根据xml文件预初始化工厂。
+	 * 只有缓存开启时才有用
 	 * Pre-initialize the factory from the XML file.
 	 * Only effective if caching is enabled.
 	 */
@@ -107,6 +114,7 @@ public class XmlViewResolver extends AbstractCachingViewResolver
 
 
 	/**
+	 * 实现只是返回视图名，因为XmlViewResolver并不支持本地化解析。
 	 * This implementation returns just the view name,
 	 * as XmlViewResolver doesn't support localized resolution.
 	 */
@@ -128,6 +136,8 @@ public class XmlViewResolver extends AbstractCachingViewResolver
 	}
 
 	/**
+	 * 根据xml文件初始化视图bean工厂
+	 * 同步是因为并发访问
 	 * Initialize the view bean factory from the XML file.
 	 * Synchronized because of access by parallel threads.
 	 * @throws BeansException in case of initialization errors
@@ -165,6 +175,7 @@ public class XmlViewResolver extends AbstractCachingViewResolver
 
 
 	/**
+	 * 上下文停止时，关闭视图bean工厂
 	 * Close the view bean factory on context shutdown.
 	 */
 	@Override

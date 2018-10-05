@@ -30,6 +30,7 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 
 /**
+ * 实用的ViewResolver实现基类。缓存已解析的视图对象：这意味着无论初始视图检索代价多大，视图解析都不会成为性能问题。
  * Convenient base class for {@link org.springframework.web.servlet.ViewResolver}
  * implementations. Caches {@link org.springframework.web.servlet.View} objects
  * once resolved: This means that view resolution won't be a performance problem,
@@ -63,13 +64,19 @@ public abstract class AbstractCachingViewResolver extends WebApplicationObjectSu
 	/** The maximum number of entries in the cache */
 	private volatile int cacheLimit = DEFAULT_CACHE_LIMIT;
 
-	/** Whether we should refrain from resolving views again if unresolved once */
+	/**
+	 * 如果解析失败过，是否避免再次解析视图
+	 * Whether we should refrain from resolving views again if unresolved once */
 	private boolean cacheUnresolved = true;
 
-	/** Fast access cache for Views, returning already cached instances without a global lock */
+	/**
+	 * 快速访问视图缓存，返回一个不需要全局锁的已缓存的实例
+	 * Fast access cache for Views, returning already cached instances without a global lock */
 	private final Map<Object, View> viewAccessCache = new ConcurrentHashMap<>(DEFAULT_CACHE_LIMIT);
 
-	/** Map from view key to View instance, synchronized for View creation */
+	/**
+	 * 映射视图key值到视图实例，同步视图创建
+	 * Map from view key to View instance, synchronized for View creation */
 	@SuppressWarnings("serial")
 	private final Map<Object, View> viewCreationCache =
 			new LinkedHashMap<Object, View>(DEFAULT_CACHE_LIMIT, 0.75f, true) {

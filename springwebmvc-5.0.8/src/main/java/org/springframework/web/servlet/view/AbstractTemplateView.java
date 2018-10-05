@@ -26,10 +26,13 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.support.RequestContext;
 
 /**
+ * 基于模版的视图技术例如FreeMarker的适配基类，可以在model中使用请求和会话属性，选择是否为Spring的FreeMarker宏命令库提供辅助对象。
  * Adapter base class for template-based view technologies such as FreeMarker,
  * with the ability to use request and session attributes in their model and
  * the option to expose helper objects for Spring's FreeMarker macro library.
  *
+ * JSP/JSTL和其他的视图技术能够自动访问当前用户的HttpServletRequest对象以及与此相关的请求/会话属性。
+ * 不仅如此，视图技术本身也可以创建缓存辅助对象作为请求属性。
  * <p>JSP/JSTL and other view technologies automatically have access to the
  * HttpServletRequest object and thereby the request/session attributes
  * for the current user. Furthermore, they are able to create and cache
