@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.ParameterizableViewController;
 import org.springframework.web.servlet.view.RedirectView;
 
 /**
+ * 辅助完成单个重定向视图控制器的注册
  * Assist with the registration of a single redirect view controller.
  *
  * @author Rossen Stoyanchev
@@ -49,6 +50,8 @@ public class RedirectViewControllerRegistration {
 
 
 	/**
+	 * 设置指定重定向状态码，3XX
+	 * 如果未设置，则默认使用302
 	 * Set the specific redirect 3xx status code to use.
 	 * <p>If not set, {@link org.springframework.web.servlet.view.RedirectView}
 	 * will select {@code HttpStatus.MOVED_TEMPORARILY (302)} by default.
@@ -60,6 +63,8 @@ public class RedirectViewControllerRegistration {
 	}
 
 	/**
+	 * 是否将斜杠开头的重定向URL视作相对于当前ServletContext，例如相对于web应用程序根上下文
+	 * 默认为真
 	 * Whether to interpret a given redirect URL that starts with a slash ("/")
 	 * as relative to the current ServletContext, i.e. as relative to the web
 	 * application root.
@@ -71,6 +76,8 @@ public class RedirectViewControllerRegistration {
 	}
 
 	/**
+	 * 是否将当前请求的查询参数传播给目标重定向URL
+	 * 默认为假
 	 * Whether to propagate the query parameters of the current request through
 	 * to the target redirect URL.
 	 * <p>Default is {@code false}.

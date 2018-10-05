@@ -34,6 +34,7 @@ import org.springframework.web.servlet.resource.VersionResourceResolver;
 import org.springframework.web.servlet.resource.WebJarsResourceResolver;
 
 /**
+ * 用于资源解析器和转换器的注册
  * Assists with the registration of resource resolvers and transformers.
  *
  * @author Rossen Stoyanchev

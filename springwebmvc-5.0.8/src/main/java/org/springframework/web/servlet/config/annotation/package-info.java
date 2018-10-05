@@ -1,4 +1,5 @@
 /**
+ * 基于注解配置Spring MVC
  * Annotation-based setup for Spring MVC.
  */
 @NonNullApi

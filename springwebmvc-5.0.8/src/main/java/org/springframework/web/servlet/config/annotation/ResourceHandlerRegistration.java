@@ -28,6 +28,7 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 /**
+ * 封装类资源处理器创建必需的信息
  * Encapsulates information required to create a resource handler.
  *
  * @author Rossen Stoyanchev
