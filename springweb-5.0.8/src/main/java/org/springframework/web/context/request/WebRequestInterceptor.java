@@ -20,15 +20,19 @@ import org.springframework.lang.Nullable;
 import org.springframework.ui.ModelMap;
 
 /**
+ * web请求拦截器通用接口。在这层抽象基础之上，Servlet和Portlet请求环境均适用。
  * Interface for general web request interception. Allows for being applied
  * to Servlet request as well as Portlet request environments, by building
  * on the {@link WebRequest} abstraction.
  *
+ * 接口用于mvc风格的请求处理：处理器执行，返回一组数据对象，然后据此渲染视图。
+ * 当然，当处理器完整处理完请求后，视图渲染不会执行。
  * <p>This interface assumes MVC-style request processing: A handler gets executed,
  * exposes a set of model objects, then a view gets rendered based on that model.
  * Alternatively, a handler may also process the request completely, with no
  * view to be rendered.
  *
+ * 说了异步处理的流程。
  * <p>In an async processing scenario, the handler may be executed in a separate
  * thread while the main thread exits without rendering or invoking the
  * {@code postHandle} and {@code afterCompletion} callbacks. When concurrent
@@ -40,6 +44,9 @@ import org.springframework.ui.ModelMap;
  * <p>This interface is deliberately minimalistic to keep the dependencies of
  * generic request interceptors as minimal as feasible.
  *
+ * 注意：尽管拦截器适用于servlet环境的请求处理，但默认只作用于portlet环境的render块用于预处理渲染portlet视图。
+ * 为了action块中也可以使用，可以设置HandlerMapping的applyWebRequestInterceptorsToRenderPhaseOnly为false。
+ * 否则，考虑使用portlet专有的HandlerInterceptor。
  * <p><b>NOTE:</b> While this interceptor is applied to the entire request processing
  * in a Servlet environment, it is by default only applied to the <i>render</i> phase
  * in a Portlet environment, preparing and rendering a Portlet view. To apply
