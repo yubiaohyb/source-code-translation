@@ -1,6 +1,6 @@
 个人解读路线
 ====
->#### RequestMappingHandlerMapping是如何完成处理器方法的的扫描注册的？ ####
+>#### RequestMappingHandlerMapping是如何完成处理器方法的扫描注册的？ ####
     RequestMappingHandlerMapping在完成bean的构造注入后，会调用生命周期的afterPropertiesSet方法。
     方法首先会对配置属性进行一系列的初始化（包括UrlPathHelper和PathMatcher等）；
     然后调用super.afterPropertiesSet()进一步地配置。
