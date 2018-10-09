@@ -32,3 +32,9 @@
     根据配置从应用上下文中获取所有的bean名称，然后根据bean名称去获取bean的类型，并判断bean是否是处理器类型（是否有@Controller或@RequestMapping）注解；
     如果是，则根据处理器的用户定义的原始类型检查获取对应的HttpMethod/RequestCondition；
     最后将经aop处理后的结果连同处理器一起添加到MappingRegistry中，方便以后使用。
+    
+>#### DispatcherServlet的service处理基本流程？ ####
+
+
+
+>#### DispatcherServlet的handler/adapter是如何获取的？handler又是如何执行的？ ####
