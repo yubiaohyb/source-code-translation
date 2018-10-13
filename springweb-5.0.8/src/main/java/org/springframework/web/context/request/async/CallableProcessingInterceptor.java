@@ -22,20 +22,24 @@ import org.springframework.core.task.AsyncTaskExecutor;
 import org.springframework.web.context.request.NativeWebRequest;
 
 /**
+ * 拦截并发请求处理，可以通过应用程序的AsyncTaskExecutor执行Callable获取并发结果。
  * Intercepts concurrent request handling, where the concurrent result is
  * obtained by executing a {@link Callable} on behalf of the application with
  * an {@link AsyncTaskExecutor}.
  *
+ * 拦截动作发生节点：异步线程Callable任务调用前后，容器线程超时或异常，又或者处理完成后（任何理由包括超时或网络异常）
  * <p>A {@code CallableProcessingInterceptor} is invoked before and after the
  * invocation of the {@code Callable} task in the asynchronous thread, as well
  * as on timeout/error from a container thread, or after completing for any reason
  * including a timeout or network error.
  *
+ * 通常，拦截器抛出的异常会作为并发结果分发回容器，稍后结果会由HandlerExceptionResolver来处理。
  * <p>As a general rule exceptions raised by interceptor methods will cause
  * async processing to resume by dispatching back to the container and using
  * the Exception instance as the concurrent result. Such exceptions will then
  * be processed through the {@code HandlerExceptionResolver} mechanism.
  *
+ * handleTimeout可以选择返回一个值，用于后续继续处理。
  * <p>The {@link #handleTimeout(NativeWebRequest, Callable) handleTimeout} method
  * can select a value to be used to resume processing.
  *

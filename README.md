@@ -34,7 +34,25 @@
     最后将经aop处理后的结果连同处理器一起添加到MappingRegistry中，方便以后使用。
     
 >#### DispatcherServlet的service处理基本流程？ ####
-
-
+    HttpServlet虽然为web容器提供了init/service/destroy三个生命周期接口，但是作为抽象虚拟超类是没有办法直接使用的。
+    在设计，service在接收到HTTP请求后，会交由保护方法doGet、doPost、doPut、doDelete等处理。
+    doXXX默认实现会返回异常信息，这样做的好处是子类可以根据需要对特定请求方式的请求进行处理，限制请求接收的方式类型，定制化一些东西。
+    
+    FrameworkServlet在继承HttpServlet后，对service以及各个doXXX方法进行了覆写。
+    FrameworkServlet定义了processRequest(request, response)方法供service以及各个doXXX方法出请求。
+    FrameworkServlet的service方法在接收到请求后，首先判断如果请求方式为PATCH或空，是则直接调用processRequest，否则调用super.service转而去调用各个覆写的doXXX方法。
+    processRequest的处理过程：
+    注册异步处理管理器，根据本地化上下文和请求属性初始化上下文容器；
+    调用doService(request, response)（抽象方法）；
+    重置上下文容器，清理请求属性；
+    发布请求处理事件。
+    
+    DispatcherServlet覆写doService方法：
+    Include请求拍属性快照；
+    请求属性添加DispatcherServlet属性（web应用上下文/主题解析器/本地化解析器/闪存）；
+    调用doDispatch(request, response)；
+    恢复请求属性快照。
+    
+    doDispatch(request, response)的执行过程：
 
 >#### DispatcherServlet的handler/adapter是如何获取的？handler又是如何执行的？ ####
