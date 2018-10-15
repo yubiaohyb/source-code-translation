@@ -78,19 +78,19 @@
     
 
 >#### DispatcherServlet的handler/adapter是如何获取的？handler又是如何执行的？ ####
-    ```java
-	protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
-		if (this.handlerMappings != null) {
-			for (HandlerMapping hm : this.handlerMappings) {
-				HandlerExecutionChain handler = hm.getHandler(request);
-				if (handler != null) {
-					return handler;
-				}
-			}
-		}
-		return null;
-	}
-	```
+```java
+protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
+    if (this.handlerMappings != null) {
+        for (HandlerMapping hm : this.handlerMappings) {
+            HandlerExecutionChain handler = hm.getHandler(request);
+            if (handler != null) {
+                return handler;
+            }
+        }
+    }
+    return null;
+}
+```
 	如上，DispatcherServlet会根据handlerMappings遍历获取匹配的处理器（执行链）。
 	这里我们以RequestMappingHandlerMapping举例：
 	本身RequestMappingHandlerMapping是没有实现getHandler方法的，而继承了来自AbstractHandlerMapping的实现。
