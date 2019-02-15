@@ -106,5 +106,99 @@ protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Ex
     如果跨域，做相应处理；
     返回处理器执行链。
     
+---
+spring boot升级
+
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-properties-migrator</artifactId>
+		<scope>runtime</scope>
+	</dependency>
+
+tail -f datacenter-biz.log | grep 'takeEffectAdaptOptionJob_Worker-1'
+
+
+借助spring-boot-dependencies构建自己的parent pom
+	<dependencyManagement>
+		<dependencies>
+			<!-- Override Spring Data release train provided by Spring Boot -->
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-releasetrain</artifactId>
+				<version>Fowler-SR2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-dependencies</artifactId>
+				<version>2.1.2.RELEASE</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+使用spring-boot-maven-plugin打包、运行程序
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+Starters集合
+	官方命名格式：spring-boot-starter-*，都是在org.springframework.boot组下面
+	三方命名推荐格式：thirdpartyproject-spring-boot-starter
+
+	spring-boot-starter-actuator用于监控、管理应用
+
+结构化代码
+	避免java类使用默认包；
+	mian类推荐使用包的根位置，方便@SpringBootApplication进行自动配置、组件扫描
+	
+配置类
+	多个配置类的组合方式：
+		@Import、@ImportResource；
+		@ComponentScan配合多个@Configuration
+		
+	@Import的三种使用方式
+		Configuration，ImportSelector，ImportBeanDefinitionRegistrar
+		
+替换自动配置
+	携带--debug参数启动程序，查看自动配置
+	关闭目标自动配置
+		@Configuration
+		@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
+		public class MyConfiguration {
+		}
+	
+	两种关闭特定自动配置方式(两者可以配合使用)：
+		@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})或者@EnableAutoConfiguration(excludeName={"xxx.xxx.xxx"})
+		配置文件配置项spring.autoconfigure.exclude
+		
+注入对象使用final修饰
+
+@SpringBootApplication等效替换
+	@EnableAutoConfiguration
+	@ComponentScan
+	@Configuration
+	
+程序开启远程debug
+		$ java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n \
+       -jar target/myapplication-0.0.1-SNAPSHOT.jar
+
+devtools简化开发配置   
+<dependencies>
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-devtools</artifactId>
+		<optional>true</optional>
+	</dependency>
+</dependencies>
+
+SpringApplication事件、监听器（区别于spring框架的事件）
     
     
